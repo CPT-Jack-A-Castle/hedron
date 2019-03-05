@@ -1,0 +1,19 @@
+include:
+  - hedron.all
+  - hedron.admin_ssh_keys
+  - hedron.git
+  - hedron.groups
+  - hedron.hosts
+  - hedron.users
+  - hedron.tincnet
+  - hedron.walkingliberty
+  - hedron.organization
+  - hedron.cpuminer
+  - hedron.sporestack
+  - hedron.tor_persistent_keys
+  - hedron.desktop
+  - hedron.hivemind
+  - hedron.namesilo
+  - hedron.monitoring
+  - hedron.ucarp
+  - hedron.vmmanagement

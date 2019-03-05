@@ -1,0 +1,77 @@
+d-i debian-installer/locale string en_US
+d-i keyboard-configuration/xkb-keymap select us
+d-i clock-setup/utc boolean true
+d-i time/zone string Etc/UTC
+d-i clock-setup/ntp boolean true
+#d-i netcfg/enable boolean false
+#d-i netcfg/disable_autoconfig true
+# d-i netcfg/choose_interface select eth0
+
+# https://superuser.com/a/920957
+d-i partman-basicfilesystems/no_swap boolean false
+
+d-i partman-auto/choose_recipe select boot-crypto
+d-i partman-auto/expert_recipe string                                   \
+    boot-crypto ::                                                      \
+        250 1024 2048 ext4                                              \
+            $primary{ } $bootable{ }                                    \
+            method{ format } format{ }                                  \
+            use_filesystem{ } filesystem{ ext4 }                        \
+            options/noatime{ noatime } options/nodiratime{ nodiratime } \
+            mountpoint{ /boot }                                         \
+        .                                                               \
+        8192 8192 -1 ext4                                               \
+            $lvmok{ } lv_name{ lvroot }                                 \
+            in_vg { vgcrypt } method{ format } format{ }                \
+            options/noatime{ noatime } options/nodiratime{ nodiratime } \
+            use_filesystem{ } filesystem{ ext4 } mountpoint{ / }        \
+    .
+
+d-i partman-auto/choose_recipe select myroot
+
+# d-i partman-auto/init_automatically_partition select biggest_free
+# d-i partman-auto/disk string /dev/nvmen0
+d-i partman-auto/method string string
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+d-i partman-auto/choose_recipe select atomic
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i partman-auto-lvm/guided_size string max
+
+d-i apt-setup/non-free boolean true
+d-i apt-setup/contrib boolean true
+#d-i apt-setup/use_mirror boolean false
+
+# Prompted passwords and passwords here don't get set. Could be
+# a bug with our salt, maybe not. Either way, the account seems
+# to get locked out. So set your root password manually.
+d-i passwd/root-password password debian
+d-i passwd/root-password-again password debian
+
+# To create a normal user account.
+d-i passwd/user-fullname string Debian User
+d-i passwd/username string debian
+# Normal user password, either in clear text
+d-i passwd/user-password password debian
+d-i passwd/user-password-again password debian
+
+d-i base-installer/install-recommends boolean false
+
+tasksel tasksel/first multiselect standard, laptop
+popularity-contest popularity-contest/participate boolean false
+
+d-i debian-installer/add-kernel-opts string net.ifnames=0
+
+d-i grub-installer/only_debian boolean false
+
+d-i grub-installer/with_other_os boolean false
+
+d-i grub-installer/bootdev string default
+d-i finish-install/reboot_in_progress note
+
+d-i preseed/late_command string /cdrom/salt/hedron/remaster/files/late_command.sh

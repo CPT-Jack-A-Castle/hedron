@@ -1,0 +1,13 @@
+dev clearnetexit
+dev-type tap
+cipher AES-256-CBC
+keepalive 20 60
+ping-timer-rem
+persist-tun
+persist-key
+<secret>
+{% include '/etc/openvpn/clearnet_exit_static.key' %}
+</secret>
+proto tcp-client
+remote {% include '/etc/tor/hidden_service_clearnet_exit/hostname' %} 1194
+socks-proxy 127.0.0.1 9050

@@ -1,0 +1,7 @@
+[Unit]
+# For use with .path
+Description=Start VM %I
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl start runqemu@%I

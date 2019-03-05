@@ -1,0 +1,24 @@
+base:
+  'os:Debian':
+    - match: grain
+    - hedron.base
+  'hedron.sporestack.hosted:True':
+    - match: grain
+    - hedron.cpuminer
+  'crypto_gateway*':
+    - hedron.crypto_gateway
+    - hedron.sporestack.autorenew
+  'obfs4gateway*':
+    - hedron.obfs4.server
+  'clearnet_exit*':
+    - hedron.clearnet_exit
+    - hedron.tinc
+    - hedron.monitorme
+    - hedron.sporestack.autorenew
+  'deadmansswitch':
+    - hedron.deadmansswitch
+  'clearnet-socks-exit-*':
+    - hedron.clearnet_socks_exit
+    - hedron.sporestack.autorenew
+  '*':
+    - hedron.base.salted

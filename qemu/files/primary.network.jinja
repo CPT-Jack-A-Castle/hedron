@@ -1,0 +1,7 @@
+[Match]
+Name=primary
+[Network]
+IPv6AcceptRA=false
+{%- if 'hedron_vmmanagement_ipv4_host_address_with_cidr' in grains %}
+Address={{ grains['hedron_vmmanagement_ipv4_host_address_with_cidr'] }}
+{%- endif %}

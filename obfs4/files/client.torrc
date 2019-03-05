@@ -1,0 +1,12 @@
+ClientTransportPlugin obfs4 exec /var/golang/bin/obfs4proxy
+
+# Get this data from /var/lib/tor/.tor/pt_state/obfs4_bridgeline.txt on the gateway
+# Get fingerprint from /var/tor/fingerprint
+
+UseBridge 1
+Bridge obfs4 107.191.44.146:443 EBBB70EF4767B3A7AD707B60B0BEA32E565296F3 cert=+uRfgq4DN8sBverHeZ59DZf6M/zE806CWrgWQ6isRqwMx6SphKWZVU9Gq/dPvoTWriRJew iat-mode=0
+
+SocksPort 0
+DataDirectory /tmp/tor-obfs4_client
+
+# Put the first three non-comment lines in /etc/tor/include/bridge, ignore SocksPort and DataDirectory.

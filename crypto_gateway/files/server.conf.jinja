@@ -1,0 +1,11 @@
+dev tun
+cipher AES-256-CBC
+keepalive 20 60
+ping-timer-rem
+persist-tun
+persist-key
+<secret>
+{% include '/etc/openvpn/crypto_gateway_static.key' %}
+</secret>
+ifconfig 192.168.197.1 192.168.197.2
+proto tcp-server

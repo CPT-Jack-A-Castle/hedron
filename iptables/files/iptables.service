@@ -1,0 +1,16 @@
+# Based on https://github.com/gronke/systemd-iptables/blob/master/etc/systemd/system/iptables.service
+
+[Unit]
+Description=iptables rules
+DefaultDependencies=no
+After=systemd-sysctl.service
+Before=sysinit.target
+[Service]
+Type=oneshot
+TimeoutSec=30
+ExecStartPre=/sbin/iptables-restore -t /etc/iptables.rules
+ExecStart=/sbin/iptables-restore /etc/iptables.rules
+ExecStop=/sbin/iptables -F
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target

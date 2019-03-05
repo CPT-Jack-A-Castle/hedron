@@ -1,0 +1,57 @@
+var graphite_url = "http://127.0.0.1:8080";  // enter your graphite url, e.g. http://your.graphite.com
+
+var dashboards = [
+  { "name": "{{ pillar['hedron.organization'] }} Stats",
+    "refresh": 5000,
+    "metrics":
+    [
+      {
+        "alias": "free_memory",  // display name for this metric
+        "target": "*.memory.memory-free",  // enter your graphite barebone target expression here
+        "description": "Free Memory",
+        "summary": "min",  // available options: [sum|min|max|avg|last|<function>]
+        "summary_formatter": d3.format(",f"),
+        "min": 0
+      },
+{%- if 'hedron.monitoring.dashboard' in pillar %}
+{%- for metric in pillar['hedron.monitoring.dashboard'] %}
+      {
+        "alias": "{{ metric }}",
+        "target": "{{ pillar['hedron.monitoring.dashboard'][metric]['target'] }}",
+        "description": "{{ pillar['hedron.monitoring.dashboard'][metric]['description'] }}",
+        "summary": "{{ pillar['hedron.monitoring.dashboard'][metric]['summary'] }}",
+        "summary_formatter": d3.format(",f"),
+        "min": 0
+      },
+{%- endfor %}
+{%- endif %}
+      {
+        "alias": "bitcoin_balance",
+        "target": "*.statsd.gauge-bitcoin_balance",
+        "description": "Bitcoin Balance",
+        "summary": "last",
+        "summary_formatter": d3.format(",f"),
+        "min": 0
+      }
+    ]
+  },
+];
+
+var scheme = [
+              '#423d4f',
+              '#4a6860',
+              '#848f39',
+              '#a2b73c',
+              '#ddcb53',
+              '#c5a32f',
+              '#7d5836',
+              '#963b20',
+              '#7c2626',
+              ].reverse();
+
+function relative_period() { return (typeof period == 'undefined') ? 1 : parseInt(period / 7) + 1; }
+function entire_period() { return (typeof period == 'undefined') ? 1 : period; }
+function at_least_a_day() { return entire_period() >= 1440 ? entire_period() : 1440; }
+
+function stroke(color) { return color.brighter().brighter() }
+function format_pct(n) { return d3.format(",f")(n) + "%" }

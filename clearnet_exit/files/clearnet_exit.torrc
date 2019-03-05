@@ -1,0 +1,7 @@
+HiddenServiceDir /etc/tor/hidden_service_clearnet_exit/
+HiddenServicePort 1194 127.0.0.1:1194
+
+HiddenServiceNonAnonymousMode 1
+HiddenServiceSingleHopMode 1
+SocksPort 0
+DataDirectory /tmp/tor-clearnet_exit

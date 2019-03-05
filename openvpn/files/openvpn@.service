@@ -1,0 +1,12 @@
+[Unit]
+Description=OpenVPN service for %I
+# Generally the case...
+Before=tor.service
+After=network.target
+
+[Service]
+User=openvpn
+ExecStart=/usr/sbin/openvpn --config /etc/openvpn/%I.conf
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=ucarp IP failover
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/ucarp --interface={{ pillar['hedron.ucarp.interface'] }} --srcip={{ pillar['hedron.ucarp.srcip'] }} --vhid={{ pillar['hedron.ucarp.vhid'] }} --pass={{ pillar['hedron.ucarp.pass'] }} --addr={{ pillar['hedron.ucarp.addr'] }} --upscript=/etc/ucarp-up.sh --downscript=/etc/ucarp-down.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

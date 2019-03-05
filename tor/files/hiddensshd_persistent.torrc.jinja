@@ -1,0 +1,10 @@
+SocksPort 0
+HiddenServiceDir /etc/tor/hiddensshd_persistent
+HiddenServicePort 22 127.0.0.1:2222
+# FIXME: This should be more configurable. Maybe Pillar?
+# 655 == tinc
+HiddenServicePort 655 127.0.0.1:655
+DataDirectory /tmp/tor-hiddensshd_persistent
+
+# /etc/tor/include/bridge follows
+{% include '/etc/tor/include/bridge' %}

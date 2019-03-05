@@ -1,0 +1,11 @@
+[Unit]
+Description=Monero Node
+
+[Service]
+User=monero
+Nice=18
+# TODO: Consider getting rid of hide-my-port?
+ExecStart=/var/tmp/monero/monerod --non-interactive --no-igd --hide-my-port
+
+[Install]
+WantedBy=multi-user.target

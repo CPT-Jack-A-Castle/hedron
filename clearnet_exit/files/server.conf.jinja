@@ -1,0 +1,13 @@
+dev clearnetexit
+dev-type tap
+cipher AES-256-CBC
+keepalive 20 60
+ping-timer-rem
+persist-tun
+persist-key
+<secret>
+{% include '/etc/openvpn/clearnet_exit_static.key' %}
+</secret>
+ifconfig 192.168.198.1 255.255.255.0
+proto tcp-server
+local 127.0.0.1

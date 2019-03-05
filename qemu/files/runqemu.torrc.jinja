@@ -1,0 +1,17 @@
+SocksPort 0
+DataDirectory /tmp/tor-runqemu
+
+# These are for VM SSH access
+{% if 'hedron_tor_slots' in grains %}
+{% set tor_slots = grains['hedron_tor_slots'] %}
+{% else %}
+{% set tor_slots = 61 %}
+{% endif %}
+{% for slot in range(4000, 4000 + tor_slots) %}
+HiddenServiceDir /etc/tor/hidden_service_slot_{{ slot }}
+HiddenServiceVersion 3
+HiddenServicePort 22 127.0.0.1:{{ slot }}
+{% endfor %}
+
+# /etc/tor/include/bridge follows
+{% include '/etc/tor/include/bridge' %}

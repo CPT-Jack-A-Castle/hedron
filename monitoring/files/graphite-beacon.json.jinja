@@ -1,0 +1,19 @@
+{
+  "graphite_url": "http://127.0.0.1:8080",
+  "interval": "1minute",
+  "no_data": "critical",
+  "format": "none",
+  "interval": "1minute",
+  "critical_handlers": ["cli"],
+  "cli": {
+      "command": "logger -p crit -- graphite-beacon: ${level} ${name} ${value}"
+  },
+  "alerts": [
+    {
+      "name": "Bitcoin Balance",
+      "query": "*.statsd.gauge-bitcoin_balance",
+      "rules": [ "warning: < 2000000", "critical: < 1000000" ],
+      "interval": "2hour"
+    }
+  ]
+}

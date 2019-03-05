@@ -1,0 +1,68 @@
+{"currencies": {"bch": "{% include '/etc/walkingliberty/address_bch' %}", "btc": "{% include '/etc/walkingliberty/address_btc' %}"},
+"organizations": {% include '/etc/vmmanagement/organizations' %},
+{%- if 'hedron_vmmanagement_ipv4' in grains %}
+"ipv4": {{ grains['hedron_vmmanagement_ipv4'] }},
+{%- else %}
+"ipv4": {"tor": 0, "nat": 0},
+{%- endif %}
+{%- if 'hedron_vmmanagement_ipv6' in grains %}
+"ipv6": {{ grains['hedron_vmmanagement_ipv6'] }},
+{%- else %}
+"ipv6": {"tor": 0, "nat": 0},
+{%- endif %}
+"ipv6_prefix": "{% include '/etc/vmmanagement/ipv6_prefix' %}",
+{%- if 'hedron_vmmanagement_ipv4_start_of_range' in grains %}
+"ipv4_start_of_range": "{{ grains['hedron_vmmanagement_ipv4_start_of_range'] }}",
+"ipv4_end_of_range": "{{ grains['hedron_vmmanagement_ipv4_end_of_range'] }}",
+{%- endif %}
+"included_bandwidth_per_day_gb": 32,
+"cents_per_extra_bandwidth_gb": 1,
+"max_extra_bandwidth_per_day_gb":  0,
+"override_code": "{% include '/etc/vmmanagement.override_code' %}",
+"cents_per_disk_gb": 1,
+"cents_per_memory_gb": 14,
+"cents_per_core": 5,
+{%- if 'hedron_vmmanagement_max_disk_gb' in grains %}
+"max_disk_gb": {{ grains['hedron_vmmanagement_max_disk_gb'] }},
+{%- else %}
+"max_disk_gb": 800,
+{%- endif %}
+{%- if 'hedron_vmmanagement_max_memory_gb' in grains %}
+"max_memory_gb": {{ grains['hedron_vmmanagement_max_memory_gb'] }},
+{%- else %}
+"max_memory_gb": 27,
+{%- endif %}
+"max_cores": 200,
+"max_days": 28,
+{%- if 'hedron_vmmanagement_draining' in grains %}
+"draining": {{ grains['hedron_vmmanagement_draining']|string|lower }},
+{%- else %}
+"draining": false,
+{%- endif %}
+{%- if 'hedron_vmmanagement_topup_enabled' in grains %}
+"topup_enabled": {{ grains['hedron_vmmanagement_topup_enabled'] }},
+{%- else %}
+"topup_enabled": false,
+{%- endif %}
+"kvmpassthrough_whole_host_only": true,
+{%- if 'hedron_vmmanagement_minimum_cents_per_day' in grains %}
+"minimum_cents_per_day": {{ grains['hedron_vmmanagement_minimum_cents_per_day'] }},
+{%- else %}
+"minimum_cents_per_day": 40,
+{%- endif %}
+"settlers_endpoint": {% include '/etc/vmmanagement/settlers_endpoint' %},
+{%- if 'hedron_vmmanagement_max_cores_per_vm' in grains %}
+"max_cores_per_vm": {{ grains['hedron_vmmanagement_max_cores_per_vm'] }},
+{%- else %}
+"max_cores_per_vm": 1,
+{%- endif %}
+{%- if 'hedron_vmmanagement_max_memory_per_vm' in grains %}
+"max_memory_per_vm": {{ grains['hedron_vmmanagement_max_memory_per_vm'] }},
+{%- else %}
+"max_memory_per_vm": 4,
+{%- endif %}
+{%- if 'hedron_vmmanagement_max_disk_per_vm' in grains %}
+"max_disk_per_vm": {{ grains['hedron_vmmanagement_max_disk_per_vm'] }}}
+{%- else %}
+"max_disk_per_vm": 25}
+{%- endif %}

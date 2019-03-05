@@ -1,0 +1,23 @@
+interface primary
+{
+	AdvSendAdvert on;
+
+	MinRtrAdvInterval 3;
+	MaxRtrAdvInterval 10;
+
+	AdvDefaultPreference medium;
+
+	prefix {% include '/etc/vmmanagement/ipv6_prefix' %}::/64
+	{
+		AdvOnLink on;
+		AdvAutonomous on;
+		AdvRouterAddr off;
+	};
+
+        RDNSS 2606:4700:4700::1111 2606:4700:4700::1001
+        {
+                AdvRDNSSLifetime 10;
+        };
+
+};
+

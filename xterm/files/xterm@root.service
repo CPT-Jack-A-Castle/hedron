@@ -1,0 +1,13 @@
+[Unit]
+Description=Starts xterm for %I
+
+[Service]
+Environment=DISPLAY=:0
+Environment=HOME=/%I
+WorkingDirectory=/%I
+ExecStart=/usr/bin/xterm -reverse -title root
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Tor Daemon for %I
+After=network.target
+
+[Service]
+User=debian-tor
+ExecStartPre=/usr/sbin/tor -f /etc/tor/%I.torrc --verify-config
+ExecStart=/usr/sbin/tor -f /etc/tor/%I.torrc
+
+[Install]
+WantedBy=multi-user.target

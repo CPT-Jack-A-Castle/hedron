@@ -1,0 +1,7 @@
+[Unit]
+# For use with .path
+Description=Tops up VMs from json files in /var/tmp/vmmanagement_topup
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/vmmanagement_run_topup

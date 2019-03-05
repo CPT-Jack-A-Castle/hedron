@@ -1,0 +1,9 @@
+[Unit]
+Description=Check balance every minute
+
+[Timer]
+OnCalendar=hourly
+Unit=balance.service
+
+[Install]
+WantedBy=multi-user.target

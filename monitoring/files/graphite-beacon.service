@@ -1,0 +1,11 @@
+[Unit]
+Description=Graphite Beacon
+
+[Service]
+# Make sure the json is valid.
+ExecStartPre=/usr/bin/python3 -m json.tool /etc/graphite-beacon.json
+ExecStart=/usr/local/bin/graphite-beacon --config=/etc/graphite-beacon.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

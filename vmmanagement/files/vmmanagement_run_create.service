@@ -1,0 +1,7 @@
+[Unit]
+# For use with .path
+Description=Create VMs from /var/tmp/runqemu_creation
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/vmmanagement_run_create

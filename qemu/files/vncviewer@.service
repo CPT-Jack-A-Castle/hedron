@@ -1,0 +1,15 @@
+[Unit]
+Description=Launches VNC for %I
+Requisite=%I.service startx.service
+After=%I.service startx.service
+
+[Service]
+# TODO: Should be User=user, likely.
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/.Xauthority
+ExecStart=/usr/bin/ssvncviewer /tmp/%I.vnc
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=startx.service

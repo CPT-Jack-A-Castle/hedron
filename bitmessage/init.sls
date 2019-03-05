@@ -1,0 +1,3 @@
+include:
+  - .pybitmessage
+# - hedron.nobit

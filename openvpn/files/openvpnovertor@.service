@@ -1,0 +1,10 @@
+[Unit]
+Description=OpenVPN service over Tor for %I
+After=network.target tor.service
+
+[Service]
+User=root
+ExecStart=/usr/sbin/openvpn --config /etc/openvpn/%I.conf
+
+[Install]
+WantedBy=multi-user.target

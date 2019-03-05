@@ -1,0 +1,4 @@
+{% if 'hedron.admin_ssh_keys' in pillar %}
+{{ pillar['hedron.admin_ssh_keys'] }}
+{% endif %}
+{% include '/etc/ssh/authorized_keys.extra' ignore missing %}

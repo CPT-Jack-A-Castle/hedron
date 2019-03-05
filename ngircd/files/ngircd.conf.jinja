@@ -1,0 +1,27 @@
+[Global]
+	Name = some.name
+	Info = Put your info here
+	Listen = 127.0.0.1
+	PidFile = /var/run/ngircd/ngircd.pid
+	Ports = 6667
+	ServerGID = irc
+	ServerUID = irc
+
+[Limits]
+	ConnectRetry = 60
+	MaxConnections = 500
+	MaxConnectionsIP = 0
+	MaxJoins = 0
+	PingTimeout = 120
+	PongTimeout = 20
+
+[Options]
+	DNS = no
+	Ident = no
+	MorePrivacy = yes
+	PAM = no
+	SyslogFacility = local1
+
+[Channel]
+	Name = #main
+	Topic = Main topic

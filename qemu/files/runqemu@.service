@@ -1,0 +1,17 @@
+[Unit]
+Description=Launches VM %I
+After=sshd.service
+
+[Service]
+# Don't normally use X and it will just restart anyway if it's not available.
+# Not optimal but works for now.
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/.Xauthority
+ExecStart=/usr/local/sbin/vmmanagement_run %I
+RuntimeDirectory=runqemu@%I
+RuntimeDirectoryMode=0700
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

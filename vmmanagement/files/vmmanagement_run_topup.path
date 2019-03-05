@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitors for topup-worthy files
+
+[Path]
+Unit=vmmanagement_run_topup.service
+DirectoryNotEmpty=/var/tmp/vmmanagement_topup
+
+[Install]
+WantedBy=multi-user.target

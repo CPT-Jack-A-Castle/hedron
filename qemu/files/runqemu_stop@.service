@@ -1,0 +1,7 @@
+[Unit]
+# For use with .path
+Description=Stop VM %I
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl stop runqemu@%I

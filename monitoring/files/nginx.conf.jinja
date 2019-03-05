@@ -1,0 +1,9 @@
+server {
+        listen 127.0.0.1:8079;
+        root /var/www/monitoring;
+        index index.html;
+        server_name _;
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}

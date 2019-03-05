@@ -1,0 +1,13 @@
+root_dir: /tmp/salt_root_doesnt_exist
+
+file_roots:
+  base:
+    - salt
+
+# Priority to the first entry over the second.
+pillar_roots:
+  base:
+    - salt/private_pillar
+    - salt/pillar
+
+failhard: True

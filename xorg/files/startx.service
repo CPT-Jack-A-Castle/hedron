@@ -1,0 +1,14 @@
+[Unit]
+Description=Starts X
+
+[Service]
+# This has issues when running as non-root.
+# User=root removes the shell setting...
+Environment=HOME=/root
+WorkingDirectory=/root
+ExecStart=/usr/bin/xinit /etc/X11/xinit/xinitrc -nolisten tcp
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

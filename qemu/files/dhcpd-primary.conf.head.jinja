@@ -1,0 +1,12 @@
+default-lease-time 600;
+max-lease-time 7200;
+
+subnet {{ grains['hedron_vmmanagement_ipv4_start_of_cidr'] }} netmask {{ grains['hedron_vmmanagement_ipv4_netmask'] }} {
+  deny unknown-clients;
+  option domain-name-servers 208.67.222.222;
+  option routers {{ grains['hedron_vmmanagement_ipv4_gateway'] }};
+  option subnet-mask {{ grains['hedron_vmmanagement_ipv4_netmask'] }};
+  default-lease-time 86400;
+  max-lease-time 86400;
+}
+

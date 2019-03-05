@@ -1,0 +1,16 @@
+version: '2'
+services:
+  wekan:
+    image: quay.io/wekan/wekan:v0.39
+    links:
+      - wekandb
+    environment:
+      - MONGO_URL=mongodb://wekandb/wekan
+      - ROOT_URL=http://{% include '/etc/tor/hidden_service_wekan/hostname' %}:80
+    ports:
+      - 127.0.0.1:80:80
+
+  wekandb:
+    image: mongo:3.2.19
+    volumes:
+      - /var/tmp/wekan/data:/data/db

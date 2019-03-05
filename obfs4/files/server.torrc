@@ -1,0 +1,19 @@
+BridgeRelay 1
+
+ServerTransportPlugin obfs4 exec /var/golang/bin/obfs4proxy
+ServerTransportListenAddr obfs4 0.0.0.0:443
+
+# It's NoAdvertise, not NoAdvertize
+ORPort auto NoAdvertise
+
+BridgeRecordUsageByCountry 0
+
+PublishServerDescriptor 0
+
+ExitPolicy reject *:*
+ExitPolicy reject6 *:*
+
+BandwidthRate 2MBits
+
+SocksPort 0
+DataDirectory /tmp/tor-obfs4_server

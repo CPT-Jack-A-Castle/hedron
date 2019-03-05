@@ -1,0 +1,6 @@
+SocksPort 9050 IPv6Traffic
+DataDirectory /var/tmp/tor
+ControlPort unix:/run/tor_client/control RelaxDirModeCheck
+
+# /etc/tor/include/bridge follows
+{% include '/etc/tor/include/bridge' %}

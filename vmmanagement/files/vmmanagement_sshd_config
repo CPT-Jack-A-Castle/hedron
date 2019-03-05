@@ -1,0 +1,23 @@
+# ListenAddress 127.0.0.1:1060
+# If we want only a Hidden Service, tornet would block inbound port 1060 so this is safe to do for both.
+Port 1060
+
+HostKey /etc/ssh/vmmanagement_host_rsa_key
+HostKey /etc/ssh/vmmanagement_host_ecdsa_key
+HostKey /etc/ssh/vmmanagement_host_ed25519_key
+
+PubkeyAuthentication no
+DebianBanner no
+PasswordAuthentication yes
+PermitEmptyPasswords yes
+ChallengeResponseAuthentication no
+UsePAM no
+X11Forwarding no
+PrintMotd no
+PrintLastLog no
+AllowUsers vmmanagement
+MaxSessions 1
+MaxAuthTries 1
+LoginGraceTime 10
+DisableForwarding no
+StrictModes no

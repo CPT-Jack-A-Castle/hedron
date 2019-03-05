@@ -1,0 +1,17 @@
+[Unit]
+Description=DHCP Daemon for %I
+After=network.target
+
+[Service]
+# We may have a bug where dhcpd tries to rewrite its config after exit? Very strange.
+# ProtectSystem=full helps with that.
+ProtectSystem=full
+ExecStartPre=/usr/sbin/dhcpd -T -cf /etc/dhcpd-%I.conf
+ExecStart=/usr/sbin/dhcpd --no-pid -d -cf /etc/dhcpd-%I.conf %I
+# If we have dhcpd run on a bridge without any attached interfaces, it will fail.
+# Super hacky fix, to try restarting when we will probably have an attached interface.
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

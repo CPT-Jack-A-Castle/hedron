@@ -1,0 +1,69 @@
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+
+# We match the slot with port 1 + the slot number as a convention. This is because the slot port already has SSH on it.
+#
+# We do this redirection first in case the host's /etc/resolv.conf has a localhost IP, to keep .onion resolution working.
+# Basically, if client has 10.0.2.3 as DNS resolver and host has 127.0.0.53 as its resolver (systemd-resolved),
+# the client VM won't get a .onion host mapping from the wrong tornet daemon.
+{% for slot in range(4000, 4060 + 1) %}
+-A OUTPUT -m owner --gid-owner "slot{{ slot }}" -p udp -m udp --dport 53 -j REDIRECT --to-ports 1{{ slot }}
+{% endfor %}
+# This gets dropped later.
+-A OUTPUT -p tcp -m tcp --dport 53 -j RETURN
+-A OUTPUT -o lo -j RETURN
+-A OUTPUT -m owner --uid-owner "ntp" -j RETURN
+-A OUTPUT -m owner --uid-owner "debian-tor" -j RETURN
+-A OUTPUT -m owner --gid-owner "debian-tor" -j RETURN
+-A OUTPUT -m owner --uid-owner "notor" -j RETURN
+-A OUTPUT -m owner --gid-owner "openvpn" -j RETURN
+-A OUTPUT -m owner --gid-owner "systemd-network" -j RETURN
+-A OUTPUT -m owner --gid-owner "systemd-timesync" -j RETURN
+{% for slot in range(4000, 4060 + 1) %}
+-A OUTPUT -m owner --gid-owner "slot{{ slot }}" -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports 1{{ slot }}
+{% endfor %}
+-A OUTPUT -p udp -m udp --dport 53 -j REDIRECT --to-ports 13999
+-A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports 13999
+COMMIT
+
+*filter
+:INPUT DROP [0:0]
+# Very odd that bridges invoke the FORWARD chain. Thought that would all be ebtables.
+:FORWARD ACCEPT [0:0]
+:OUTPUT DROP [0:0]
+
+# As stupid as this is, it works. The intuitive options seem to not.
+-A FORWARD -i clearnetexitbr -o clearnetexitbr -j ACCEPT
+-A FORWARD -j DROP
+
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -p icmpv6 -j ACCEPT
+# This is okay because our hidden service SSH has a different fingerprint.
+-A INPUT -p tcp --dport 22 -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+--ipv4 -A INPUT -p tcp -j REJECT --reject-with tcp-reset
+--ipv4 -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable
+--ipv4 -A INPUT -j REJECT --reject-with icmp-proto-unreachable
+--ipv6 -A INPUT -j REJECT
+# Reject TCP port 53 traffic in case we have a DNS resolver running behind tor (systemd-resolved, perhaps), which could otherwise get confused by tor's type of response.
+-A OUTPUT -p tcp --dport 53 -j REJECT
+--ipv4 -A OUTPUT -d 127.0.0.0/8 -j ACCEPT
+--ipv6 -A OUTPUT -d ::1/128 -j ACCEPT
+-A OUTPUT -m owner --uid-owner "ntp" -j ACCEPT
+-A OUTPUT -m owner --uid-owner "debian-tor" -j ACCEPT
+-A OUTPUT -m owner --gid-owner "debian-tor" -j ACCEPT
+-A OUTPUT -m owner --uid-owner "notor" -j ACCEPT
+-A OUTPUT -m owner --gid-owner "openvpn" -j ACCEPT
+-A OUTPUT -m owner --gid-owner "systemd-network" -j ACCEPT
+-A OUTPUT -m owner --gid-owner "systemd-timesync" -j ACCEPT
+-A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A OUTPUT -m conntrack --ctstate INVALID -j DROP
+# Packets without a uid owner should be from the kernel. For example, ICMPv6 replies.
+-A OUTPUT -m owner ! --uid-owner 0-65535 -j ACCEPT
+--ipv4 -A OUTPUT -j REJECT --reject-with icmp-port-unreachable
+--ipv6 -A OUTPUT -j REJECT
+COMMIT

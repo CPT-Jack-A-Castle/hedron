@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitors for creation-worthy files
+
+[Path]
+Unit=vmmanagement_run_create.service
+DirectoryNotEmpty=/var/tmp/vmmanagement_creation
+
+[Install]
+WantedBy=multi-user.target
