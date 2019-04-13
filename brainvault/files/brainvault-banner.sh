@@ -49,6 +49,9 @@ echo 'walkingliberty --currency bch address --qr $(brainkey password_hash $(cat 
 # shellcheck disable=SC2016
 echo 'walkingliberty --currency btc address --qr $(brainkey password_hash $(cat ~/.brainvault/hash) btc_wallet)'
 echo
+echo "# If you want to double mix Bitcoin into your wallet"
+echo "doublemixer mix --currency bitcoin --output_address $BITCOIN_ADDRESS"
+echo
 echo "# Launching a Debian Stretch server with SporeStack, paying with Bitcoin Cash:"
 echo "sporestack_helper bch normal AnyOldHostname --days 1"
 echo "# Launching a Debian Stretch hidden server with SporeStack, paying with Bitcoin:"
