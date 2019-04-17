@@ -50,31 +50,24 @@ hedron_fiat_per_coin_service_btc_timer_running:
     - name: fiat_per_coin@btc.timer
     - enable: True
 
-# FIXME: bitcoinaverage pretty much dropped their BCH endpoint
-# so you have to pay for it. 2019-03-05
-#hedron_fiat_per_coin_service_bch_timer_running:
-#  service.running:
-#    - name: fiat_per_coin@bch.timer
-#    - enable: True
-# Disabling for now.
-hedron_fiat_per_coin_service_bch_timer_dead:
-  service.dead:
+hedron_fiat_per_coin_service_bch_timer_running:
+  service.running:
     - name: fiat_per_coin@bch.timer
-    - enable: False
+    - enable: True
 
 # This needs to be ran so we have data to work with as soon as possible.
-# Sometimes bitcoinaverage's API can fail. We have some stub values, as of 2019-03-05
+# Sometimes bitcoinaverage's API can fail. We have some stub values, as of 2019-04-17
 # that can be backups so we don't break an entire install.
 hedron_fiat_per_coin_bch_prime:
   cmd.run:
-    - name: systemctl start fiat_per_coin@bch || (echo 123 > /var/cache/fiat_per_coin/bch/even; echo 122 > /var/cache/fiat_per_coin/bch/odd)
+    - name: systemctl start fiat_per_coin@bch || (echo 300 > /var/cache/fiat_per_coin/bch/even; echo 301 > /var/cache/fiat_per_coin/bch/odd)
     - creates:
       - /var/cache/fiat_per_coin/bch/even
       - /var/cache/fiat_per_coin/bch/odd
 
 hedron_fiat_per_coin_btc_prime:
   cmd.run:
-    - name: systemctl start fiat_per_coin@btc || (echo 3737 > /var/cache/fiat_per_coin/btc/even; echo 3732 > /var/cache/fiat_per_coin/btc/odd)
+    - name: systemctl start fiat_per_coin@btc || (echo 5000 > /var/cache/fiat_per_coin/btc/even; echo 5001 > /var/cache/fiat_per_coin/btc/odd)
     - creates:
       - /var/cache/fiat_per_coin/btc/even
       - /var/cache/fiat_per_coin/btc/odd

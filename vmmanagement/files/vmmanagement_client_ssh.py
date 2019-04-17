@@ -269,7 +269,7 @@ def host_info(hostname):
 @cli.cmd_arg('machine_id')
 def serialconsole(hostname, machine_id):
     """
-    ctrl + \ to quit.
+    ctrl + backslash to quit.
     """
     command = 'serialconsole {}'.format(machine_id)
     ssh(hostname, command, interactive=True)
