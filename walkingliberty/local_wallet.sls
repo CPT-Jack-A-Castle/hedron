@@ -29,3 +29,9 @@ hedron_walkingliberty_local_wallet_bch:
     - name: walkingliberty --currency bch address $(cat /etc/walkingliberty/private) | file_helper write_file_from_stdin --atleast_bytes 20 /etc/walkingliberty/address_bch
     - umask: 0077
     - creates: /etc/walkingliberty/address_bch
+
+hedron_walkingliberty_local_wallet_bsv:
+  cmd.run:
+    - name: walkingliberty --currency bsv address $(cat /etc/walkingliberty/private) | file_helper write_file_from_stdin --atleast_bytes 20 /etc/walkingliberty/address_bsv
+    - umask: 0077
+    - creates: /etc/walkingliberty/address_bsv

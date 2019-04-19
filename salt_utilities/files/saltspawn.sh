@@ -6,7 +6,7 @@ set -e
 SALTHOSTNAME=$1
 
 if [ $# -lt 2 ]; then
-    echo "Usage: $0 <hostname> (other stuff for sporestackv2 like --host and/or --api_endpoint)>"
+    echo "Usage: $0 <hostname> (other stuff for sporestackv2 like --days 1)>"
     exit 1
 fi
 

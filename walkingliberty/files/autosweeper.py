@@ -5,6 +5,8 @@ import logging
 
 from walkingliberty import WalkingLiberty
 
+CURRENCIES = ('bch', 'btc', 'bsv')
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -46,7 +48,7 @@ def sweep(currency):
 
 
 def autosweep():
-    for currency in ['bch', 'btc']:
+    for currency in CURRENCIES:
         if can_sweep(currency):
             logging.info('Balance non-zero, sweeping {}'.format(currency))
             sweep(currency)

@@ -55,6 +55,11 @@ hedron_fiat_per_coin_service_bch_timer_running:
     - name: fiat_per_coin@bch.timer
     - enable: True
 
+hedron_fiat_per_coin_service_bsv_timer_running:
+  service.running:
+    - name: fiat_per_coin@bsv.timer
+    - enable: True
+
 # This needs to be ran so we have data to work with as soon as possible.
 # Sometimes bitcoinaverage's API can fail. We have some stub values, as of 2019-04-17
 # that can be backups so we don't break an entire install.
@@ -72,6 +77,13 @@ hedron_fiat_per_coin_btc_prime:
       - /var/cache/fiat_per_coin/btc/even
       - /var/cache/fiat_per_coin/btc/odd
 
+hedron_fiat_per_coin_bsv_prime:
+  cmd.run:
+    - name: systemctl start fiat_per_coin@bsv || (echo 80 > /var/cache/fiat_per_coin/bsv/even; echo 81 > /var/cache/fiat_per_coin/btc/odd)
+    - creates:
+      - /var/cache/fiat_per_coin/bsv/even
+      - /var/cache/fiat_per_coin/bsv/odd
+
 # Verify things are working as they should be.
 # Eventually, hopefully salt can actually test for creates arguments and except if they aren't made after the state is ran.
 hedron_fiat_per_coin_btc_exists:
@@ -81,3 +93,7 @@ hedron_fiat_per_coin_btc_exists:
 hedron_fiat_per_coin_bch_exists:
   file.exists:
     - name: /var/cache/fiat_per_coin/bch/even
+
+hedron_fiat_per_coin_bsv_exists:
+  file.exists:
+    - name: /var/cache/fiat_per_coin/bsv/even
