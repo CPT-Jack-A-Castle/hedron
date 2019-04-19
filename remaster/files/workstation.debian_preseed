@@ -10,27 +10,6 @@ d-i clock-setup/ntp boolean true
 # https://superuser.com/a/920957
 d-i partman-basicfilesystems/no_swap boolean false
 
-d-i partman-auto/choose_recipe select boot-crypto
-d-i partman-auto/expert_recipe string                                   \
-    boot-crypto ::                                                      \
-        250 1024 2048 ext4                                              \
-            $primary{ } $bootable{ }                                    \
-            method{ format } format{ }                                  \
-            use_filesystem{ } filesystem{ ext4 }                        \
-            options/noatime{ noatime } options/nodiratime{ nodiratime } \
-            mountpoint{ /boot }                                         \
-        .                                                               \
-        8192 8192 -1 ext4                                               \
-            $lvmok{ } lv_name{ lvroot }                                 \
-            in_vg { vgcrypt } method{ format } format{ }                \
-            options/noatime{ noatime } options/nodiratime{ nodiratime } \
-            use_filesystem{ } filesystem{ ext4 } mountpoint{ / }        \
-    .
-
-d-i partman-auto/choose_recipe select myroot
-
-# d-i partman-auto/init_automatically_partition select biggest_free
-# d-i partman-auto/disk string /dev/nvmen0
 d-i partman-auto/method string string
 d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-md/device_remove_md boolean true
