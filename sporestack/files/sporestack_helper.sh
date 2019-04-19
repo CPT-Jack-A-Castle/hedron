@@ -4,7 +4,7 @@ set -e
 
 usage() {
     echo "Usage: $0 currency, networking mode, hostname, optional arguments"
-    echo "$0: <btc|bch> <normal|hidden> <SomeReferenceName> [optional arguments]"
+    echo "$0: <btc|bch|bsv> <normal|hidden> <SomeReferenceName> [optional arguments]"
     exit 1
 }
 
@@ -17,6 +17,8 @@ case "$CURRENCY" in
     btc)
         ;;
     bch)
+        ;;
+    bsv)
         ;;
     *)
         usage
