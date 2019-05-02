@@ -9,7 +9,6 @@ hedron_phidelius_archive:
       - http://s3.amazonaws.com/dmk/phidelius-1.01.tgz
     - source_hash: 235975e7190ff276b412930885cb35dc921aac5262732b1341d8ee53244fe73f
     - makedirs: True
-    - keep_source: False
 
 # archive.extracted is a bit of a mess...
 # --group 0 is ideal for this but doesn't seem to work. Even with --no-same-owner, files get extracted with the "staff" group.

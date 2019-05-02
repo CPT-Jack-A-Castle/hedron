@@ -19,7 +19,6 @@ hedron_opencl_amd_download:
     - source: https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-17.40-492261.tar.xz
     - source_hash: b0645157577c9ff175dc02487c4c682ded2624c8c2cfd6aa603960962e1d07b0
     - replace: False
-    - keep_source: False
 
 hedron_opencl_amd_directory:
   file.directory:

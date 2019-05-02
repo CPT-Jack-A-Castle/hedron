@@ -26,7 +26,6 @@ hedron_notbit_package_source_archive:
       - https://github.com/bpeel/notbit/archive/5cdb2396860c6815545d057c85dc638e8e13da18.tar.gz
     - source_hash: 0398533bd7902b8daf4fdfa517e38e6ddbfded8dac85f170b07cbe29f0b25ccd
     - makedirs: True
-    - keep_source: False
 
 hedron_notbit_package_source_directory:
   file.directory:

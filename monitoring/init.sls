@@ -2,10 +2,8 @@ include:
   - hedron.pip
   - hedron.nginx
 
-# FIXME: Incompatible with any other nginx services on the same system :-/.
-
 # FIXME: Designed for ssh port forwarding to get to the dashboard
-# Example: ssh -L 8079:127.0.0.1:8079 -L 8080:127.0.0.1:8080 root@foo.onion
+# Example: ssh -L 8079:127.0.0.1:8079 -L 8081:127.0.0.1:8081 root@foo.onion
 
 # gunicorn3 is for graphite-api
 # nginx is for giraffe which pulls from graphite-api
@@ -63,7 +61,7 @@ hedron_monitoring_graphite_api_socket:
   file.replace:
     - name: /lib/systemd/system/graphite-api.socket
     - pattern: 127.0.0.1:8542
-    - repl: 127.0.0.1:8080
+    - repl: 127.0.0.1:8081
 
 hedron_monitoring_graphite_api_service:
   service.running:
@@ -93,7 +91,6 @@ hedron_monitoring_girafee_fetch:
       - https://github.com/kenhub/giraffe/archive/1.3.1.tar.gz
     - source_hash: 8c24daa1828f9dba919bd393e77b8814de9ee10de8490d84d9305a39bf077655
     - makedirs: True
-    - keep_source: False
 
 hedron_monitoring_giraffee_extracted:
   cmd.run:

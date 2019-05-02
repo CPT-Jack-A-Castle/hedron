@@ -6,7 +6,6 @@ hedron_gogs_archive:
       - https://dl.gogs.io/0.11.86/gogs_0.11.86_linux_amd64.tar.gz
     - source_hash: 01432f903e7e91aa54f7b78faf1167462da0e7b26c7f1055247a76a814688bfc
     - makedirs: True
-    - keep_source: False
 
 hedron_gogs_directory:
   file.directory:

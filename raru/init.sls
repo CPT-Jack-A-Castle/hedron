@@ -14,7 +14,6 @@ hedron_raru_source_archive:
       - https://github.com/teran-mckinney/raru/archive/e7605f4b8b58125ae6be6d904f3a379cd2262799.tar.gz
     - source_hash: eac410f691bafe0b015c6f936ff5c49335df8b738ccf6ae49d77cbcf1bcc7643
     - makedirs: True
-    - keep_source: False
 
 hedron_raru_source_directory:
   file.directory:

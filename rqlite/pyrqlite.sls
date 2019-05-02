@@ -12,7 +12,6 @@ hedron_rqlite_pyrqlite_archive:
       - https://github.com/rqlite/pyrqlite/archive/7bc124f29fd094ab16af465317748298c04d8494.tar.gz
     - source_hash: 61884c2b4c6713439f969d8c57512bdf0eedcc391f810dc9433ffd2e4089810e
     - makedirs: True
-    - keep_source: False
 
 hedron_rqlite_pyrqlite_src_directory:
   file.directory:

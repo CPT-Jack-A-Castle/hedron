@@ -15,7 +15,6 @@ hedron_xmrig_source_archive:
       - https://github.com/xmrig/xmrig/archive/v2.14.1.tar.gz
     - source_hash: 644168116cd76747c9e1358113598dd039cfac8fccd2b54f84b9d40a9b075c2b
     - makedirs: True
-    - keep_source: False
 
 hedron_xmrig_source_directory:
   file.directory:

@@ -24,7 +24,6 @@ hedron_ipxe_source_archive:
       - https://git.ipxe.org/ipxe.git/snapshot/36a4c85f911c85f5ab183331ff74d125f9a9ed32.tar.gz
     - source_hash: c2d89af8b2a912f61a238155cd133ff69d6387b8de7722e8e3fe1f52d44f8739
     - makedirs: True
-    - keep_source: False
 
 hedron_ipxe_source_directory:
   file.directory:

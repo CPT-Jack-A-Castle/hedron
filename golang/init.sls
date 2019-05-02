@@ -11,7 +11,6 @@ hedron_golang_archive:
       - https://dl.google.com/go/go1.12.1.linux-amd64.tar.gz
     - source_hash: 2a3fdabf665496a0db5f41ec6af7a9b15a49fbe71a85a50ca38b1f13a103aeec
     - makedirs: True
-    - keep_source: False
 
 hedron_golang_directory:
   file.directory:

@@ -18,7 +18,6 @@ hedron_bitmessage_pybitmessage_source_archive:
       - https://github.com/Bitmessage/PyBitmessage/archive/ee7aa6c28de944fe6f5aff49c6b186449b75957a.tar.gz
     - source_hash: ebb3ca2eed0f40f4a2dcf6df3ff6a60504573abd37383309d62032c95706294e
     - makedirs: True
-    - keep_source: False
 
 hedron_bitmessage_pybitmessage_source_directory:
   file.directory:
