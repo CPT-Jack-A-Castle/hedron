@@ -4,6 +4,7 @@ include:
   - hedron.git
   - hedron.groups
   - hedron.hosts
+  - hedron.ipfs
   - hedron.users
   - hedron.tincnet
   - hedron.walkingliberty

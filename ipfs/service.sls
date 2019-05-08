@@ -1,6 +1,12 @@
+{% if 'hedron.ipfs.profile' in pillar %}
+{% set ipfs_profile = pillar['hedron.ipfs.profile'] %}
+{% else %}
+{% set ipfs_profile = 'server,lowpower' %}
+{% endif %}
+
 hedron_ipfs_service_init:
   cmd.run:
-    - name: ipfs init --profile server,lowpower
+    - name: ipfs init --profile {{ ipfs_profile }}
     - runas: ipfs
     - creates: /srv/ipfs/.ipfs
 
