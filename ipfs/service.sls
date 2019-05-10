@@ -6,13 +6,23 @@
 
 hedron_ipfs_service_init:
   cmd.run:
-    - name: ipfs init --profile {{ ipfs_profile }}
     - runas: ipfs
+    - name: ipfs init --profile {{ ipfs_profile }}
     - creates: /srv/ipfs/.ipfs
 
 hedron_ipfs_service_init_verify:
   file.exists:
     - name: /srv/ipfs/.ipfs
+
+{% if 'hedron.ipfs.bootstrap_add' in pillar %}
+{% for bootstrap in pillar['hedron.ipfs.bootstrap_add'] %}
+hedron_ipfs_bootstrap_add_{{ bootstrap }}:
+  cmd.run:
+    - runas: ipfs
+    - name: ipfs bootstrap add {{ bootstrap }}
+    - unless: ipfs bootstrap | grep {{ bootstrap }}
+{% endfor %}
+{% endif %}
 
 hedron_ipfs_service_file:
   file.managed:
@@ -40,3 +50,13 @@ hedron_ipfs_service_running:
     - enable: True
     - watch:
       - file: /etc/systemd/system/ipfs.service
+
+{% if 'hedron.ipfs.pin_add' in pillar %}
+{% for pin in pillar['hedron.ipfs.pin_add'] %}
+hedron_ipfs_pin_add_{{ pin }}:
+  cmd.run:
+    - runas: ipfs
+    - name: ipfs pin add {{ pin }}
+    - unless: ipfs pin ls {{ pin }}
+{% endfor %}
+{% endif %}

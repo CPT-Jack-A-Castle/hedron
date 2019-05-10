@@ -1,0 +1,16 @@
+server {
+        listen 8060;
+        listen [::]:8060;
+        proxy_read_timeout 300;
+        location /ipfs/ {
+                proxy_pass http://127.0.0.1:8080;
+        }
+
+# Or if you don't want access to all IPFS objects, do this instead:
+{% for hash in pillar['hedron.ipfs.pins'] %}
+        location /ipfs/{{ hash }} {
+              proxy_pass http://127.0.0.1:8080;
+        }
+{% endfor %}
+
+}
