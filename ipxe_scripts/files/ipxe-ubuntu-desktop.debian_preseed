@@ -42,6 +42,10 @@ d-i base-installer/install-recommends boolean true
 tasksel tasksel/first multiselect ubuntu-desktop
 popularity-contest popularity-contest/participate boolean false
 
+d-i pkgsel/update-policy select unattended-upgrades
+d-i pkgsel/include string xterm
+d-i pkgsel/upgrade select full-upgrade
+
 d-i debian-installer/add-kernel-opts string net.ifnames=0
 
 d-i grub-installer/only_debian boolean false

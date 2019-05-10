@@ -50,3 +50,7 @@ logsomething "Enabling firstboot."
 in-target systemctl enable firstboot
 logsomething "Enabling debug-shell."
 in-target systemctl enable debug-shell
+
+# Stupidly, Debian leaves the cdrom apt source which isn't mounted and we get hung on.
+
+in-target sed -i /cdrom/d /etc/apt/sources.list
