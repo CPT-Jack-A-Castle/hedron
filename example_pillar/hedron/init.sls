@@ -1,6 +1,7 @@
 include:
   - hedron.all
   - hedron.admin_ssh_keys
+  - hedron.cpuminer
   - hedron.git
   - hedron.groups
   - hedron.hosts
@@ -11,6 +12,7 @@ include:
   - hedron.organization
   - hedron.cpuminer
   - hedron.sporestack
+  - hedron.tor
   - hedron.tor_persistent_keys
   - hedron.desktop
   - hedron.hivemind

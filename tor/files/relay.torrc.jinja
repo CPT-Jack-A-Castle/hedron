@@ -1,0 +1,32 @@
+SocksPort 0
+ClientUseIPv6 1
+DataDirectory /var/tmp/tor
+ORPort auto
+ORPort [{{ grains['ip6_interfaces']['eth0'][0] }}]:1100 IPv6Only
+
+{% if 'hedron.tor.relay.BandwidthRate' in pillar %}
+BandwidthRate {{ pillar['hedron.tor.relay.BandwidthRate'] }}
+{% else %}
+# Set a sane maximum in case this is not configured to avoid using a ton of bandwidth.
+BandwidthRate 2MBits
+{% endif %}
+
+{% if 'hedron.tor.relay.AccountingMax' in pillar %}
+AccountingMax {{ pillar['hedron.tor.relay.AccountingMax'] }}
+{% endif %}
+
+{% if 'hedron.tor.relay.AccountingRule' in pillar %}
+AccountingRule {{ pillar['hedron.tor.relay.AccountingRule'] }}
+{% endif %}
+
+{% if 'hedron.tor.relay.AccountingStart' in pillar %}
+AccountingStart {{ pillar['hedron.tor.relay.AccountingStart'] }}
+{% endif %}
+
+ExitRelay 0
+CellStatistics 0
+PaddingStatistics 0
+DirReqStatistics 0
+HiddenServiceStatistics 0
+ExtraInfoStatistics 0
+ControlPort unix:/run/tor_relay/control RelaxDirModeCheck

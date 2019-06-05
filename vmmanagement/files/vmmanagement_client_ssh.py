@@ -84,6 +84,9 @@ def create(hostname,
                    'hostaccess': hostaccess}
     json_arguments = json.dumps(create_dict)
     stdout, stderr, return_code = ssh(hostname, 'create', json_arguments)
+    # This is a terrible compromise. We don't know if the client should
+    # retry or give up here. Could be a ValueError, TypeError, and we shoul
+    # 500. 400 for everything else. Instead, we just 400. Not good.
     if return_code != 0:
         message = 'Creation failure: stdout: {} stderr: {}'.format(stdout,
                                                                    stderr)

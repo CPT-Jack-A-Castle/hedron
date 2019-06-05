@@ -4,6 +4,9 @@
 # It can also improve redundancy in some cases, and improve speed when used with Tor
 # tremendously in some cases.
 
+# Update: Actually, caching DNS queries when using Tor can make it less private.
+# Probably better not to do this by default.
+
 # One should think about how these settings act with tornet.
 # nat mode VM will use this setting normally. A tor mode VM will have iptables
 # direct such traffic to tor ultimately, and the IPs won't matter. Unless
@@ -17,7 +20,7 @@
 {% if 'hedron_networking_resolv_conf' in grains %}
 {% set resolv_conf_enable = grains['hedron_networking_resolv_conf'] %}
 {% else %}
-{% set resolv_conf_enable = True %}
+{% set resolv_conf_enable = False %}
 {% endif %}
 
 {# == and not is with jinja. #}

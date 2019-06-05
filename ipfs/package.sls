@@ -3,8 +3,8 @@ hedron_ipfs_package_archive:
     - name: /srv/salt/dist/ipfs.tar.gz
     - source:
       - salt://dist/ipfs.tar.gz
-      - https://ipfs.io/ipns/dist.ipfs.io/go-ipfs/v0.4.20/go-ipfs_v0.4.20_linux-amd64.tar.gz
-    - source_hash: 155dbdb2d7a9b8df38feccf48eb925cf9ab650754dc51994aa1e0bda1c1f9123
+      - https://dist.ipfs.io/go-ipfs/v0.4.21/go-ipfs_v0.4.21_linux-amd64.tar.gz
+    - source_hash: a7ec5ddc4d52f818cbf3853a80f7ec17f9fde9128f039485dbe1889cf673d562
     - makedirs: True
 
 hedron_ipfs_package_directory:

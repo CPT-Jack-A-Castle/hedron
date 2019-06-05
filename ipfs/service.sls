@@ -51,6 +51,18 @@ hedron_ipfs_service_running:
     - watch:
       - file: /etc/systemd/system/ipfs.service
 
+# Just because they are in the bootstrap list doesn't mean they'll get connected to, sadly.
+# || true because we probably don't want it to fail hard in case a single node is down.
+{% if 'hedron.ipfs.bootstrap_add' in pillar %}
+{% for bootstrap in pillar['hedron.ipfs.bootstrap_add'] %}
+hedron_ipfs_swarm_connect_{{ bootstrap }}:
+  cmd.run:
+    - runas: ipfs
+    - name: ipfs swarm connect {{ bootstrap }} || true
+    - unless: ipfs swarm peers | grep {{ bootstrap }}
+{% endfor %}
+{% endif %}
+
 {% if 'hedron.ipfs.pin_add' in pillar %}
 {% for pin in pillar['hedron.ipfs.pin_add'] %}
 hedron_ipfs_pin_add_{{ pin }}:
