@@ -18,7 +18,9 @@ hedron_base_hostname_salt_minion_id:
 hedron_base_hostname_localhost:
   host.present:
     - name: localhost
-    - ip: 127.0.0.1
+    - ip:
+      - 127.0.0.1
+      - ::1
 
 # This controls the FQDN name.
 hedron_base_hostname_minion_id:
