@@ -2,9 +2,6 @@
 
 import sys
 import os
-import logging
-
-import sh
 
 import hedron
 
@@ -94,7 +91,7 @@ def qemu_arguments(vm):
     arguments.append('-name')
     arguments.append(vm)
     arguments.append('-smp')
-    arguments.append(vm_info['cores'])
+    arguments.append(str(vm_info['cores']))
     arguments.append('-m')
     arguments.append('{}G'.format(vm_info['memory']))
     arguments.append('-cpu')
@@ -119,11 +116,14 @@ def qemu_arguments(vm):
 
 
 def run_qemu(arguments, gid):
-    qemu = sh.Command('qemu-system-x86_64')
     os.setgid(gid)
     # Open up umask for serial terminals.
     os.umask(0o0000)
-    return qemu(arguments)
+    command = '/usr/bin/qemu-system-x86_64'
+    # We need to have a command argv else we break qemu (or most anything's)
+    # argument parsing. It becomes $0 and shows up in the process table.
+    arguments.insert(0, command)
+    os.execv('/usr/bin/qemu-system-x86_64', arguments)
 
 
 def get_gid(vm):
@@ -142,11 +142,9 @@ def get_gid(vm):
 def run_vm(vm):
     gid = get_gid(vm)
     arguments = qemu_arguments(vm)
-    return run_qemu(arguments, gid)
+    run_qemu(arguments, gid)
 
 
 if __name__ == '__main__':
+    # This is an execv, so we don't return.
     output = run_vm(sys.argv[1])
-    logging.error(output)
-    # Exit 1 if we get to this point?
-    exit(1)

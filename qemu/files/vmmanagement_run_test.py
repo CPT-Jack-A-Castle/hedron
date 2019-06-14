@@ -108,7 +108,7 @@ def test_network_argument(mock_virtual_machine_info):
     assert output == expected_native
 
 
-expected = ['-name', 'justamachine', '-smp', 2, '-m', '2G', '-cpu', 'kvm64',
+expected = ['-name', 'justamachine', '-smp', '2', '-m', '2G', '-cpu', 'kvm64',
             '-enable-kvm', '-nodefaults', '-monitor', 'none', '-qmp',
             'unix:/run/runqemu@justamachine/qmp,server,nowait', '-display',
             'sdl', '-vga', 'virtio',
