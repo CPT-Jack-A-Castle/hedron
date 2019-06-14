@@ -70,11 +70,15 @@ hedron_gogs_service_file:
         Description=gogs
         After=network.target
         [Service]
+        LimitMEMLOCK=infinity
+        LimitNOFILE=65535
         User=gogs
         Group=gogs
         UMask=0077
         ExecStart=/usr/local/gogs/gogs web
         WorkingDirectory=/usr/local/gogs
+        NoNewPrivileges=true
+        Restart=on-failure
         [Install]
         WantedBy=multi-user.target
 
@@ -82,6 +86,8 @@ hedron_gogs_service_running:
   service.running:
     - name: gogs
     - enable: True
+    - watch:
+      - file: /etc/systemd/system/gogs.service
 
 # Instructions:
 # Browse to service.
