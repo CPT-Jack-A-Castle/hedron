@@ -25,7 +25,6 @@ valid_id = '01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b'
 bch_address = 'bitcoincash:qzhqr2tw5kx5pj05dfxt4ly42lucug4tavdctvgrp8'
 
 generic_valid_config = {'currencies': {'bch': bch_address},
-                        'organizations': ['cia', 'nsa'],
                         'ipv4': {"/32": 10, 'nat': 1, 'tor': 0},
                         'ipv6': {"/128": 1, 'nat': 1, 'tor': 0},
                         'ipv6_prefix': '2001:0db8:1234:5678',
@@ -389,22 +388,6 @@ def test_virtual_machine_create_earns_override(mock_get_config,
     assert return_data['sshport'] == 22
     assert return_data['slot'] == 4000
     assert return_data['bandwidth'] == -1
-
-    # Make sure organization not in list throws error.
-    with pytest.raises(ValueError):
-        virtual_machine_create(machine_id=valid_id,
-                               days=1,
-                               memory=1,
-                               disk=10,
-                               cores=1,
-                               bandwidth=0,
-                               currency='bch',
-                               organization='fbi',
-                               refund_address='1address',
-                               override_code='prettyplease',
-                               qemuopts=None,
-                               managed=False,
-                               hostaccess=False)
 
     # Make sure draining with override does not stop new builds.
     our_config['draining'] = True

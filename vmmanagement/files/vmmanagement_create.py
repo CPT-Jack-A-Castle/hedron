@@ -25,7 +25,6 @@ CREATION_DIRECTORY = '/var/tmp/vmmanagement_creation'
 # This is more trouble than it's worth, especially for alternative drivers.
 # Eventually want to do type checking on known keys, perhaps.
 # VALID_CONFIG_OPTIONS = ('currencies',
-#                         'organizations',
 #                         'settlers_endpoint',
 #                         'topup_enabled',
 #                         'draining',
@@ -469,10 +468,6 @@ def virtual_machine_create(machine_id,
     # settlement_token is validated in settlers.
     if virtual_machine_exists(machine_id):
         raise ValueError('machine_id is already in use.')
-
-    if organization is not None:
-        if organization not in config['organizations']:
-            raise ValueError('Organization not found.')
 
     if not override(override_code):
         if currency not in config['currencies']:
