@@ -9,9 +9,11 @@ alert() {
 
 HOSTNAME=$(hostname)
 DAYS=7
+# This is so hacky...
 WALLET="$(cat /var/tmp/autorenew_bip32)"
+CURRENCY="$(cat /var/tmp/autorenew_currency)"
 
-sporestackv2 topup "$HOSTNAME" --days "$DAYS" --currency bch --walkingliberty_wallet "$WALLET" || alert
+sporestackv2 topup "$HOSTNAME" --days "$DAYS" --currency "$CURRENCY" --walkingliberty_wallet "$WALLET" || alert
 
 EXPIRES=$(sporestackv2 get_attribute "$HOSTNAME" expiration)
 

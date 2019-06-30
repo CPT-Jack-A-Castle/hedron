@@ -1,4 +1,8 @@
+{%- if 'hedron.vmmanagement.address_btc' in pillar %}
+{"currencies": {"bch": "{{ pillar['hedron.vmmanagement.address_bch'] }}", "btc": "{{ pillar['hedron.vmmanagement.address_btc'] }}", "bsv": "{{ pillar['hedron.vmmanagement.address_bsv'] }}"},
+{%- else %}
 {"currencies": {"bch": "{% include '/etc/walkingliberty/address_bch' %}", "btc": "{% include '/etc/walkingliberty/address_btc' %}", "bsv": "{% include '/etc/walkingliberty/address_bsv' %}"},
+{%- endif %}
 {%- if 'hedron_vmmanagement_ipv4' in grains %}
 "ipv4": {{ grains['hedron_vmmanagement_ipv4'] }},
 {%- else %}

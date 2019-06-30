@@ -14,6 +14,12 @@ hedron_sporestack_autorenew_bip32:
     - contents_pillar: hedron.walkingliberty
     - mode: 0400
 
+hedron_sporestack_autorenew_currency:
+  file.managed:
+    - name: /var/tmp/autorenew_currency
+    - contents_pillar: hedron.walkingliberty.currency
+    - mode: 0400
+
 # Outside of default PATH so it doesn't accidentally get called.
 hedron_sporestack_autorenew_script:
   file.managed:

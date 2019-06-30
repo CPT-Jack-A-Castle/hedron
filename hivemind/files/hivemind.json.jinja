@@ -1,1 +1,11 @@
-{"bitmessage_address": "{{ pillar['hedron.hivemind.bitmessage_address'] }}"}
+{
+    "methods": {
+        "local_log": {
+            "file": "/var/log/hivemind.log"
+        },
+        "bitmessage": {
+            "address": "{{ pillar['hedron.hivemind.bitmessage_address'] }}"
+        }
+    }
+}
+

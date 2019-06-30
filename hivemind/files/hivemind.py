@@ -11,6 +11,8 @@ from sh import uptime, journalctl, systemctl
 
 import notbit
 
+CONFIG_FILE = '/etc/hivemind.json'
+
 logging.basicConfig(level=logging.INFO)
 
 cli = aaargh.App()
@@ -20,8 +22,8 @@ def get_config():
     """
     Returns and validates the config.
     """
-    valid_options = ('bitmessage_address',)
-    with open('/etc/hivemind.json') as hivemind_config_file:
+    valid_options = ('methods',)
+    with open(CONFIG_FILE) as hivemind_config_file:
         hivemind_config = json.load(hivemind_config_file)
 
     for entry in hivemind_config:
@@ -32,45 +34,72 @@ def get_config():
         if entry not in hivemind_config:
             raise ValueError('{} missing option.'.format(entry))
 
+    valid_methods = ['bitmessage', 'local_log']
+    for method in hivemind_config['methods']:
+        if method not in valid_methods:
+            msg = '{} is not a valid method. Try: '.format(method,
+                                                           valid_methods)
+            raise ValueError(msg)
+
+    if len(hivemind_config['methods']) == 0:
+        raise ValueError('Must have at least one method.')
+
     return hivemind_config
 
 
+def relay_message(subject, message):
+    methods = get_config()['methods']
+    for method in methods:
+        if method == 'bitmessage':
+            address = methods[method]['address']
+            relay_message_bitmessage(address, subject, message)
+        elif method == 'local_log':
+            file = methods[method]['file']
+            relay_message_local_log(file, subject, message)
+        else:
+            raise ValueError('{} is not a valid method.'.format(method))
+
+
+def relay_message_bitmessage(address, subject, message):
+    logging.info("Sending bitmessage.")
+    notbit.send_message(address=address, message=message, subject=subject)
+
+
+def relay_message_local_log(file, subject, message):
+    logging.info("Writing to local log file.")
+    with open(file, mode='a') as fp:
+        fp.write(subject)
+        fp.write(message)
+        fp.write("\n")
+
+
 @cli.cmd
-def beacon(bitmessage_address=None):
+def beacon():
     """
     Sends out a beacon to let everyone know it's still alive.
     """
-    if bitmessage_address is None:
-        bitmessage_address = get_config()['bitmessage_address']
-    notbit.send_message(bitmessage_address,
-                        beacon_message(),
-                        'Hivemind Beacon for {}'.format(gethostname()))
+    relay_message(subject='Hivemind Beacon for {}'.format(gethostname()),
+                  message=beacon_message())
     return True
 
 
 @cli.cmd
-def uptime_reset(bitmessage_address=None):
+def uptime_reset():
     """
     Sends out a beacon to let everyone know about a uptime reset.
     """
-    if bitmessage_address is None:
-        bitmessage_address = get_config()['bitmessage_address']
-    notbit.send_message(bitmessage_address,
-                        beacon_message(),
-                        'Uptime reset on {}'.format(gethostname()))
+    relay_message(subject='Uptime reset on {}'.format(gethostname()),
+                  message=beacon_message())
     return True
 
 
 @cli.cmd
-def hello_world(bitmessage_address=None):
+def hello_world():
     """
     Sends out a beacon to let everyone know we were born.
     """
-    if bitmessage_address is None:
-        bitmessage_address = get_config()['bitmessage_address']
-    notbit.send_message(bitmessage_address,
-                        beacon_message(),
-                        'Hello world from {}'.format(gethostname()))
+    relay_message(subject='Hello world from {}'.format(gethostname()),
+                  message=beacon_message())
     return True
 
 
@@ -158,12 +187,10 @@ def grab_alert_if_alertable():
 
 
 @cli.cmd
-def send_alert_if_necessary(bitmessage_address=None):
+def send_alert_if_necessary():
     """
     Fire off an alert if we need to.
     """
-    if bitmessage_address is None:
-        bitmessage_address = get_config()['bitmessage_address']
 
     alerts = grab_alert_if_alertable()
     if alerts is not None:
@@ -171,9 +198,8 @@ def send_alert_if_necessary(bitmessage_address=None):
         message += '\n\nLogs truncated to first 4096 bytes\n'
         message += alerts
         logging.info('Sending alert')
-        notbit.send_message(bitmessage_address,
-                            message,
-                            'ALERTS for {}'.format(gethostname()))
+        relay_message(subject='ALERTS for {}'.format(gethostname()),
+                      message=message)
     return True
 
 
