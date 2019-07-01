@@ -25,6 +25,12 @@ hedron_vmmanagement_vmmanagement_config_sample:
     - user: root
     - mode: 0400
 
+# Hack to make sure vmmanagement configuration sample is valid json
+hedron_vmmanagement_vmmanagement_config_sample_validate:
+  cmd.run:
+    - name: python3 -m json.tool /etc/vmmanagement.json.sample
+    - unless: python3 -m json.tool /etc/vmmanagement.json.sample
+
 # FIXME: Can we do this with file.copy?
 # Don't overwrite the config that's there.
 hedron_vmmanagement_vmmanagement_config:

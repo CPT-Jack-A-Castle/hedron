@@ -18,6 +18,7 @@ logging.basicConfig(level=logging.INFO)
 cli = aaargh.App()
 
 
+@cli.cmd
 def get_config():
     """
     Returns and validates the config.

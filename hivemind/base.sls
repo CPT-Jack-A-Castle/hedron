@@ -1,10 +1,12 @@
 # Hivemind
 
-# Also requires hedron.tor.hiddensshd
+# Also requires hedron.tor.hiddensshd to embed onion access into the messages.
 
 include:
   - hedron.pip
-  - hedron.notbit
+  - hedron.notbit.package
+
+# Need to include hedron.notbit before this state if you want to use Bitmessage.
 
 hedron_hivemind_base_pip_dependencies:
   pip.installed:
@@ -31,3 +33,9 @@ hedron_hivemind_base_configuration:
     - source: salt://hedron/hivemind/files/hivemind.json.jinja
     - template: jinja
     - mode: 0400
+
+# Hack to test configuration so we fail out if it's bad.
+hedron_hivemind_valiadate_configuration:
+  cmd.run:
+    - name: hivemind get_config
+    - unless: hivemind get_config

@@ -2,10 +2,14 @@
     "methods": {
         "local_log": {
             "file": "/var/log/hivemind.log"
+{%- if 'hedron.hivemind.bitmessage_address' in pillar %}
         },
         "bitmessage": {
             "address": "{{ pillar['hedron.hivemind.bitmessage_address'] }}"
         }
+{%- else %}
+        }
+{%- endif %}
     }
 }
 
