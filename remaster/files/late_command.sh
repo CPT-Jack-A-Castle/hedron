@@ -24,6 +24,9 @@ chmod 700 /target/srv/pillar
 logsomething "Installing salt-minion..."
 
 apt-install salt-minion
+# This needs compiler/autoconf and all.
+#apt-install python3-pip python3-setuptools python3-wheel
+#in-target pip3 install salt
 
 logsomething "...Installed salt-minion."
 

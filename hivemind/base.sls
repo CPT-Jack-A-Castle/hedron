@@ -4,7 +4,6 @@
 
 include:
   - hedron.pip
-  - hedron.notbit.package
 
 # Need to include hedron.notbit before this state if you want to use Bitmessage.
 
@@ -17,7 +16,7 @@ hedron_hivemind_base_pip_dependencies:
 
 hedron_hivemind_base_notbit_library:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/notbit.py
+    - name: {{ grains['hedron_python_dist_path'] }}/notbit.py
     - source: salt://hedron/hivemind/files/notbit.py
     - mode: 0644
 

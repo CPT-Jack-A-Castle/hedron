@@ -21,6 +21,12 @@ hedron_tor_client_service_file:
         Group=67
         UMask=0077
         RuntimeDirectory=tor_client
+        # Hardening
+        NoNewPrivileges=yes
+        PrivateDevices=yes
+        ProtectHome=yes
+        ProtectSystem=strict
+        CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
         ExecStart=/usr/sbin/tor -f /etc/tor/client.torrc
         [Install]
         WantedBy=multi-user.target

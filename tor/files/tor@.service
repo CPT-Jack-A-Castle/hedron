@@ -7,5 +7,14 @@ User=debian-tor
 ExecStartPre=/usr/sbin/tor -f /etc/tor/%I.torrc --verify-config
 ExecStart=/usr/sbin/tor -f /etc/tor/%I.torrc
 
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=yes
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
+
+
 [Install]
 WantedBy=multi-user.target

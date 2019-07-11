@@ -46,6 +46,8 @@ hedron_base_packages_purged:
 
 # Install these on all systems.
 
+# gnupg2 is for apt-key add on Debian 10
+
 hedron_base_packages:
   pkg.installed:
     - pkgs:
@@ -72,6 +74,7 @@ hedron_base_packages:
       - ndisc6
       - mtr-tiny
       - bind9-host
+      - gnupg2
 
 hedron_base_var_empty:
   file.directory:

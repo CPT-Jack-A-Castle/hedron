@@ -6,7 +6,6 @@ hedron_hivemind_uptime_reset_service_file:
     - contents: |
         [Unit]
         Description=Hivemind uptime reset notitifcation
-        After=notbit.service
         [Service]
         Type=oneshot
         ExecStart=/usr/local/bin/hivemind uptime_reset

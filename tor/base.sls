@@ -2,15 +2,16 @@ hedron_tor_base_apt_deps:
   pkg.installed:
     - pkgs:
       - apt-transport-https
-      - python-apt
       - python3-apt
 
 # Key instructions: https://www.torproject.org/docs/debian.html.en
 # Can also get it from /etc/apt/trusted.gpg.d/deb.torproject.org-keyring.gpg
 # on an updated system. gpg --import, gpg -a --export, etc.
+#
+# oscodename is stretch, buster, etc.
 hedron_tor_base_repo:
   pkgrepo.managed:
-    - name: deb https://deb.torproject.org/torproject.org stretch main
+    - name: deb https://deb.torproject.org/torproject.org {{ grains['oscodename'] }} main
     - key_url: salt://hedron/tor/files/torproject.asc
 
 hedron_tor_base_other_key_thing:

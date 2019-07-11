@@ -1,3 +1,5 @@
+# /usr/local/bin/salt-call if using pip installed salt
+
 hedron_base_firstboot_service_file:
   file.managed:
     - name: /etc/systemd/system/firstboot.service

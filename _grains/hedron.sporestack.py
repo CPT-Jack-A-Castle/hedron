@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Can't find a way to do top file matches to a grain that's in
 # a nested dictionary. This is why it's now flat.

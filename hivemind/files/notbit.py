@@ -1,4 +1,4 @@
-from sh import notbit_sendmail_system
+import sh
 
 
 def _sendmail_format(from_address, to_address, message, subject=None):
@@ -45,5 +45,5 @@ def send_message(address, message, subject=None):
                                          address,
                                          message,
                                          subject)
-    notbit_sendmail_system(_in=formatted_message)
+    sh.notbit_sendmail_system(_in=formatted_message)
     return True

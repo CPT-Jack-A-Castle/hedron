@@ -1,3 +1,5 @@
+# FIXME BREAKSBUSTER: This is broken in Debian Buster: https://github.com/saltstack/salt/issues/51745
+
 # Use IPv6 privacy extensions.
 hedron_networking_ipv6_privacy_ipv6_private_default:
   sysctl.present:

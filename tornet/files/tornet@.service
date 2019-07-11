@@ -13,5 +13,12 @@ RuntimeDirectory=tornet-%I
 ExecStart=/usr/sbin/tor --ignore-missing-torrc -f /etc/tor/include/bridge --SocksPort "0 IPv6Traffic" --VirtualAddrNetworkIPv4 172.16.0.0/12 --VirtualAddrNetworkIPv6 [FC00::]/7 --AutomapHostsOnResolve 1 --AutomapHostSuffixes .onion --TransPort "127.0.0.1:%I" --TransPort "[::1]:%I" --DNSPort "127.0.0.1:%I" --DNSPort "[::1]:%I" --DataDirectory /var/tmp/tor --ControlPort "unix:/run/tornet-%I/control RelaxDirModeCheck"
 Restart=on-failure
 
+# Hardening
+NoNewPrivileges=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=full
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
+
 [Install]
 WantedBy=multi-user.target
