@@ -19,12 +19,13 @@ cli = aaargh.App()
 
 
 @cli.cmd
-def get_config():
+@cli.cmd_arg('--config_file')
+def get_config(config_file=CONFIG_FILE):
     """
     Returns and validates the config.
     """
     valid_options = ('methods',)
-    with open(CONFIG_FILE) as hivemind_config_file:
+    with open(config_file) as hivemind_config_file:
         hivemind_config = json.load(hivemind_config_file)
 
     for entry in hivemind_config:

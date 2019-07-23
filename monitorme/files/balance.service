@@ -3,7 +3,15 @@ Description=Submit Bitcoin balance to statsd
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/balance
+# Keep Python site module from breaking. If we do python -S, it can't find aaargh
+ExecStart=/usr/local/bin/balance balance_all
+Environment=HOME=/
+# Hardening
+DynamicUser=yes
+NoNewPrivileges=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=strict
 
 [Install]
 WantedBy=multi-user.target

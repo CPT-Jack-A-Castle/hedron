@@ -152,21 +152,12 @@ def test_existing_txids(mock_list_virtual_machines,
                         mock_virtual_machine_info):
     mock_list_virtual_machines.return_value = ['a', 'b']
     mock_virtual_machine_info.return_value = {'txid': 'just a txid'}
-    assert existing_txids('btc') == []
-    mock_virtual_machine_info.return_value = {'txid': 'just a txid',
-                                              'currency': 'settlement'}
+    # Settlement returns an empty list to be faster.
     assert existing_txids('settlement') == []
-    assert existing_txids('btc') == []
-    mock_virtual_machine_info.return_value = {'txid': 'just a txid',
-                                              'currency': 'btc'}
     assert existing_txids('btc') == ['just a txid', 'just a txid']
-    mock_list_virtual_machines.return_value = ['a']
-    assert existing_txids('btc') == ['just a txid']
-    mock_list_virtual_machines.return_value = []
-    assert existing_txids('btc') == []
-    mock_list_virtual_machines.return_value = ['a']
-    mock_virtual_machine_info.return_value = {'wat': 'nothing'}
-    assert existing_txids('btc') == []
+    assert existing_txids('bch') == ['just a txid', 'just a txid']
+    mock_virtual_machine_info.return_value = {}
+    assert existing_txids('bsv') == []
 
 
 @patch('vmmanagement_create.get_config')

@@ -18,5 +18,6 @@ include:
   - hedron.hivemind
   - hedron.namesilo
   - hedron.monitoring
+  - hedron.monitorme
   - hedron.ucarp
   - hedron.vmmanagement

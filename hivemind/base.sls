@@ -27,14 +27,15 @@ hedron_hivemind_base_binary:
     - mode: 0755
 
 hedron_hivemind_base_configuration:
-  file.managed:
+  file.serialize:
     - name: /etc/hivemind.json
-    - source: salt://hedron/hivemind/files/hivemind.json.jinja
-    - template: jinja
+    - dataset_pillar: hedron.hivemind
     - mode: 0400
-
-# Hack to test configuration so we fail out if it's bad.
-hedron_hivemind_valiadate_configuration:
+    - formatter: json
+# https://github.com/saltstack/salt/issues/53982
+#    - check_cmd: hivemind get_config --config_file
+# Hack for now:
+hedron_hivemind_base_configuration_verify:
   cmd.run:
-    - name: hivemind get_config
-    - unless: hivemind get_config
+    - name: hivemind get_config --config_file /etc/hivemind.json
+    - unless: hivemind get_config --config_file /etc/hivemind.json

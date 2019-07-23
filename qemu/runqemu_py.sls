@@ -26,6 +26,8 @@ hedron_runqemu_py_destroy_expired_service:
         Type=oneshot
         TimeoutSec=300
         ExecStart=/usr/local/sbin/runqemu_py destroy_expired_virtual_machines
+    - check_cmd: systemd-analyze verify
+    - tmp_exit: .service
 
 hedron_runqemu_py_destroy_expired_timer:
   file.managed:
@@ -37,6 +39,8 @@ hedron_runqemu_py_destroy_expired_timer:
         OnCalendar=minutely
         [Install]
         WantedBy=multi-user.target
+    - check_cmd: systemd-analyze verify
+    - tmp_exit: .timer
 
 hedron_runqemu_py_enable_timer:
   service.running:

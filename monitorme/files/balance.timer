@@ -1,5 +1,5 @@
 [Unit]
-Description=Check balance every minute
+Description=Check balance every hour
 
 [Timer]
 OnCalendar=hourly

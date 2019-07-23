@@ -10,6 +10,7 @@ import logging
 import time
 import ipaddress
 
+import statsd as libstatsd
 import bitcoinacceptor
 from systemd.journal import JournalHandler
 from sporestackv2 import validate
@@ -17,6 +18,12 @@ from sporestackv2 import validate
 import hedron
 import fiat_per_coin
 import settlers_of_cryptotan as settlers
+
+# Potential vulnerability, statsd isn't running and a malicious user launches
+# an emulted statsd to steal stats with.
+statsd = libstatsd.StatsClient('localhost',
+                               8125,
+                               prefix='vmmanagement.create.')
 
 CONFIG_FILE = '/etc/vmmanagement.json'
 
@@ -300,20 +307,16 @@ def existing_txids(currency):
     """
     txids = []
 
-    if currency != 'settlement':
-        for vm in hedron.list_virtual_machines():
-            vm_info = hedron.virtual_machine_info(vm)
+    if currency == 'settlement':
+        return txids
 
-            if 'currency' not in vm_info:
-                continue
+    for vm in hedron.list_virtual_machines():
+        vm_info = hedron.virtual_machine_info(vm)
 
-            if vm_info['currency'] != currency:
-                continue
+        if 'txid' not in vm_info:
+            continue
 
-            if 'txid' not in vm_info:
-                continue
-
-            txids.append(vm_info['txid'])
+        txids.append(vm_info['txid'])
     return txids
 
 
@@ -379,6 +382,7 @@ def cost_in_cents(days,
     return total_cents
 
 
+@statsd.timer('payment')
 def payment(machine_id,
             currency,
             cents,
@@ -413,9 +417,14 @@ def payment(machine_id,
         amount = btcacceptor.satoshis
         if btcacceptor.txid is False or txid in existing_txids:
             txid = None
+        else:
+            statsd.gauge('payment.cents.{}'.format(currency),
+                         cents,
+                         delta=True)
     return txid, amount
 
 
+@statsd.timer('virtual_machine_create')
 def virtual_machine_create(machine_id,
                            days,
                            currency,

@@ -5,10 +5,9 @@ hedron_walkingliberty_autosweeper_script:
     - mode: 0755
 
 hedron_walkingliberty_autosweeper_config:
-  file.managed:
+  file.serialize:
     - name: /etc/walkingliberty/autosweeper.json
-    - source: salt://hedron/walkingliberty/files/autosweeper.json.jinja
-    - template: jinja
+    - dataset_pillar: hedron.walkingliberty.autosweeper
     - user: root
     - mode: 0400
 

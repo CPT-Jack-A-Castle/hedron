@@ -27,7 +27,11 @@ find -L . -type f -name 'nginx.conf' | while read -r nginx_file; do
     fi
 done
 
-# May be able to test systemd units with systemd-analyze verify
+# So this breaks on # service files and if it can't find a service in that path. Better to check with check_cmd.
+#echo 'Verifying Systemd files'
+#find -L . -type f -name '*.service' -o -name "*.timer" -o -name "*.path" | grep -vF '@' | while read -r systemd_file; do
+#    systemd-analyze verify "$systemd_file"
+#done
 
 echo 'flake8ing python files.'
 find -L . -type f -name '*.py' | while read -r python_script; do

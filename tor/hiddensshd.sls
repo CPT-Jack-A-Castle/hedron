@@ -24,6 +24,8 @@ hedron_tor_hiddensshd_service_file:
   file.managed:
     - name: /etc/systemd/system/hiddensshd.service
     - source: salt://hedron/tor/files/hiddensshd.service
+    - check_cmd: systemd-analyze verify
+    - tmp_ext: .service
 
 hedron_tor_hiddensshd_service_running:
   service.running:

@@ -5,6 +5,7 @@ hedron_tor_client_config:
     - name: /etc/tor/client.torrc
     - source: salt://hedron/tor/files/client.torrc.jinja
     - template: jinja
+    - check_cmd: tor --verify-config -f
 
 hedron_tor_client_service_file:
   file.managed:

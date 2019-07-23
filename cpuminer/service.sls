@@ -6,6 +6,8 @@ hedron_cpuminer_service_file:
     - source: salt://hedron/cpuminer/files/cpuminer.service.jinja
     - template: jinja
     - mode: 0400
+    - check_cmd: systemd-analyze verify
+    - tmp_ext: .service
 
 
 hedron_cpuminer_service_running:

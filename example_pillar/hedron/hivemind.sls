@@ -1,1 +1,6 @@
-hedron.hivemind.bitmessage_address: BM-foobar
+hedron.hivemind:
+  methods:
+    local_log:
+      file: /var/log/hivemind.log
+    bitmessage:
+      address: BM-foobar

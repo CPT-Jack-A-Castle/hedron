@@ -33,6 +33,7 @@ hedron_vmmanagement_vmmanagement_config_sample_validate:
 
 # FIXME: Can we do this with file.copy?
 # Don't overwrite the config that's there.
+# FIXME: Consider file.serialize
 hedron_vmmanagement_vmmanagement_config:
   file.managed:
     - name: /etc/vmmanagement.json
@@ -86,11 +87,15 @@ hedron_vmmanagement_vmmanagement_run_create_service:
   file.managed:
     - name: /etc/systemd/system/vmmanagement_run_create.service
     - source: salt://hedron/vmmanagement/files/vmmanagement_run_create.service
+    - check_cmd: systemd-analyze verify
+    - tmp_ext: .service
 
 hedron_vmmanagement_vmmanagement_run_create_path_service:
   file.managed:
     - name: /etc/systemd/system/vmmanagement_run_create.path
     - source: salt://hedron/vmmanagement/files/vmmanagement_run_create.path
+    - check_cmd: systemd-analyze verify
+    - tmp_ext: .path
 
 hedron_vmmanagement_vmmangement_run_create_path_enable_service:
   service.running:
@@ -113,11 +118,15 @@ hedron_vmmanagement_vmmanagement_run_topup_service:
   file.managed:
     - name: /etc/systemd/system/vmmanagement_run_topup.service
     - source: salt://hedron/vmmanagement/files/vmmanagement_run_topup.service
+    - check_cmd: systemd-analyze verify
+    - tmp_ext: .service
 
 hedron_vmmanagement_vmmanagement_run_topup_path_service:
   file.managed:
     - name: /etc/systemd/system/vmmanagement_run_topup.path
     - source: salt://hedron/vmmanagement/files/vmmanagement_run_topup.path
+    - check_cmd: systemd-analyze verify
+    - tmp_ext: .path
 
 hedron_vmmanagement_vmmangement_run_topup_path_enable_service:
   service.running:

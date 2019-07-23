@@ -1,37 +1,59 @@
-#!/usr/bin/python3
-
-# FIXME: Should support public addresses.
+#!/usr/bin/python3 -EB
 
 import logging
-import os
+import json
 
+import aaargh
 import statsd as libstatsd
-import sh
 from walkingliberty import WalkingLiberty
 
+CONFIG_FILE = '/etc/balance.json'
+
+cli = aaargh.App()
 logging.basicConfig(level=logging.INFO)
 
 
-if os.path.exists('/var/tmp/autorenew_bip32'):
-    with open('/var/tmp/autorenew_bip32') as fp:
-        bip32 = fp.read()
-        bip32 = bip32.strip('\n')
-else:
-    # Very hacky. Unfortunately, salt is Python 2 and not Python 3.
-    # Output is local: wallet
-    bip32 = sh.salt_call('--local',
-                         '--no-color',
-                         '--retcode-passthrough',
-                         '--log-file=/dev/null',
-                         '--out=txt',
-                         'pillar.get',
-                         'hedron.walkingliberty')
-    bip32 = str(bip32).strip('\n')
-    bip32 = bip32.split(' ')[1]
+@cli.cmd
+@cli.cmd_arg('--config_file', type=str, default=CONFIG_FILE)
+def get_config(config_file=CONFIG_FILE):
+    """
+    Returns and validates the config.
+    """
+    with open(config_file) as fp:
+        config = json.load(fp)
+
+    for item in config:
+        if len(item) != 2:
+            raise ValueError("Invalid configuration")
+        if 'currency' not in item:
+            raise ValueError("Invalid configuration")
+        if 'address' not in item:
+            raise ValueError("Invalid configuration")
+
+    return config
 
 
-statsd = libstatsd.StatsClient('localhost', 8125)
-walkingliberty = WalkingLiberty('bch')
-balance = walkingliberty.balance(bip32)
-logging.info('Balance: {}'.format(balance))
-statsd.gauge('bitcoin.balance', balance)
+@cli.cmd
+@cli.cmd_arg('currency')
+@cli.cmd_arg('address')
+def balance(currency, address):
+    statsd = libstatsd.StatsClient('localhost', 8125)
+    walkingliberty = WalkingLiberty(currency, wallet_mode='address')
+    balance = walkingliberty.balance(address)
+    logging.info('Balance for {} on {}: {}'.format(address, currency, balance))
+    statsd.gauge('balance.{}.{}'.format(currency, address), balance)
+
+
+@cli.cmd
+@cli.cmd_arg('--config_file', type=str, default=CONFIG_FILE)
+def balance_all(config_file=CONFIG_FILE):
+    config = get_config(config_file)
+    for pair in config:
+        balance(currency=pair['currency'],
+                address=pair['address'])
+
+
+if __name__ == '__main__':
+    output = cli.run()
+    if output is not None:
+        print(output)
