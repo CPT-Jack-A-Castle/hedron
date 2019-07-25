@@ -13,7 +13,7 @@ import ipaddress
 import statsd as libstatsd
 import bitcoinacceptor
 from systemd.journal import JournalHandler
-from sporestackv2 import validate
+from sporestackv2 import validate, utilities
 
 import hedron
 import fiat_per_coin
@@ -568,6 +568,12 @@ def virtual_machine_create(machine_id,
                                settlers_customer_token=token)
         return_data['txid'] = txid
         return_data['payment']['amount'] = amount
+        uri = utilities.payment_to_uri(address=address,
+                                       currency=currency,
+                                       amount=amount)
+        return_data['payment']['uri'] = uri
+        return_data['payment']['usd'] = utilities.cents_to_usd(cents)
+
         if return_data['txid'] is not None:
             return_data['paid'] = True
 
