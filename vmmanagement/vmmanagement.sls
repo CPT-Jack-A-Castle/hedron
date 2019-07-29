@@ -64,18 +64,11 @@ hedron_vmmanagement_vmmanagement_shell:
     - source: salt://hedron/vmmanagement/files/vmmanagement_shell.sh
     - mode: 0755
 
-
 hedron_vmmanagement_vmmanagement_create_library:
   file.managed:
     - name: /usr/local/lib/python3.5/dist-packages/vmmanagement_create.py
     - source: salt://hedron/vmmanagement/files/vmmanagement_create.py
     - mode: 0644
-
-hedron_vmmanagement_vmmanagement_create:
-  file.managed:
-    - name: /usr/local/bin/vmmanagement_create
-    - source: salt://hedron/vmmanagement/files/vmmanagement_create.py
-    - mode: 0755
 
 hedron_vmmanagement_vmmanagement_run_create:
   file.managed:
@@ -102,9 +95,9 @@ hedron_vmmanagement_vmmangement_run_create_path_enable_service:
     - name: vmmanagement_run_create.path
     - enable: True
 
-hedron_vmmanagement_vmmanagement_topup:
+hedron_vmmanagement_vmmanagement_topup_library:
   file.managed:
-    - name: /usr/local/bin/vmmanagement_topup
+    - name: /usr/local/lib/python3.5/dist-packages/vmmanagement_topup.py
     - source: salt://hedron/vmmanagement/files/vmmanagement_topup.py
     - mode: 0755
 
@@ -132,9 +125,3 @@ hedron_vmmanagement_vmmangement_run_topup_path_enable_service:
   service.running:
     - name: vmmanagement_run_topup.path
     - enable: True
-
-hedron_vmmanagement_vmmanagement_host_info:
-  file.managed:
-    - name: /usr/local/bin/vmmanagement_host_info
-    - source: salt://hedron/vmmanagement/files/vmmanagement_host_info.py
-    - mode: 0755

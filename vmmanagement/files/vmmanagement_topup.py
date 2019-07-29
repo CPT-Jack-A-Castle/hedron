@@ -1,7 +1,4 @@
-#!/usr/bin/python3 -E
-
-# This can be ran by *anyone* and does not directly top up the VM, only issues
-# a request for root to do so.
+# Does not directly top up the VM, only issues a request for root to do so.
 
 
 import sys
@@ -161,21 +158,3 @@ def virtual_machine_topup(machine_id,
 
     # toppedup and paid should always be the same, True or False.
     return return_data
-
-
-if __name__ == '__main__':
-    input = json.loads(sys.stdin.read())
-    machine_id = input['machine_id']
-    days = input['days']
-    currency = input['currency']
-    refund_address = input['refund_address']
-    override_code = input['override_code']
-    settlement_token = input['settlement_token']
-
-    output = virtual_machine_topup(machine_id=machine_id,
-                                   days=days,
-                                   currency=currency,
-                                   refund_address=refund_address,
-                                   settlement_token=settlement_token,
-                                   override_code=override_code)
-    print(json.dumps(output))

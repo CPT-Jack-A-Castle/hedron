@@ -3,5 +3,5 @@ include:
 
 hedron_sporestack_pip_installed:
   pip.installed:
-    - name: sporestack==1.0.4
+    - name: sporestack==1.0.5
     - bin_env: /usr/bin/pip3

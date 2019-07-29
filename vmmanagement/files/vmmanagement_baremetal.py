@@ -1,6 +1,6 @@
 """
 
-vmmanagement implementation for baremetal.
+vmmanagement HTTP implementation for baremetal.
 
 """
 
@@ -12,7 +12,9 @@ import statsd as libstatsd
 from falcon import HTTP_400, HTTP_500
 from sporestackv2 import validate
 
+import vmmanagement_create
 import vmmanagement_client_ssh as vmmanagement_client
+from vmmanagement_topup import virtual_machine_topup
 
 
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +29,35 @@ def host_info():
     """
     Info on the host
     """
-    return vmmanagement_client.host_info(LOCALHOST)
+    config = vmmanagement_create.get_and_validate_config()
+    available_resources = vmmanagement_create.get_available_resources()
+
+    def _dict_to_list(dictionary):
+        our_list = []
+        for item in dictionary:
+            our_list.append(item)
+        return our_list
+
+    currencies = _dict_to_list(config['currencies'])
+    ipv4 = _dict_to_list(config['ipv4'])
+    ipv6 = _dict_to_list(config['ipv6'])
+
+    return_dict = {'cores': available_resources['cores'],
+                   'memory': available_resources['memory'],
+                   'disk': available_resources['disk'],
+                   'ipv4_addresses': available_resources['ipv4_addresses'],
+                   'currencies': currencies,
+                   'ipv4': ipv4,
+                   'ipv6': ipv6,
+                   'draining': config['draining'],
+                   'topup_enabled': config['topup_enabled'],
+                   'max_cores_per_vm': config['max_cores_per_vm'],
+                   'max_disk_per_vm': config['max_disk_per_vm'],
+                   'max_memory_per_vm': config['max_memory_per_vm'],
+                   'max_days': config['max_days'],
+                   'features': ['ipxe']}
+
+    return return_dict
 
 
 @hug.post('/launch', versions=2)
@@ -74,23 +104,23 @@ def launch(machine_id,
         raise ValueError('Only None region supported for this host.')
 
     def create_vm():
-        return vmmanagement_client.create(hostname=LOCALHOST,
-                                          machine_id=machine_id,
-                                          days=days,
-                                          disk=disk,
-                                          memory=memory,
-                                          cores=cores,
-                                          ipv4=ipv4,
-                                          ipv6=ipv6,
-                                          bandwidth=bandwidth,
-                                          currency=currency,
-                                          settlement_token=settlement_token,
-                                          organization=organization,
-                                          refund_address=refund_address,
-                                          override_code=override_code,
-                                          qemuopts=qemuopts,
-                                          hostaccess=hostaccess,
-                                          managed=managed)
+        create = vmmanagement_create.virtual_machine_create
+        return create(machine_id=machine_id,
+                      days=days,
+                      memory=memory,
+                      disk=disk,
+                      cores=cores,
+                      ipv4=ipv4,
+                      ipv6=ipv6,
+                      bandwidth=bandwidth,
+                      currency=currency,
+                      refund_address=refund_address,
+                      override_code=override_code,
+                      settlement_token=settlement_token,
+                      qemuopts=qemuopts,
+                      managed=managed,
+                      organization=organization,
+                      hostaccess=hostaccess)
 
     created_dict = create_vm()
     # paid and created should always be the same.
@@ -111,17 +141,23 @@ def topup(machine_id,
           days,
           currency,
           host=None,
-          settlement_token=None):
+          settlement_token=None,
+          refund_address=None,
+          override_code=None):
     """
     tops up an existing vm.
     """
     validate.machine_id(machine_id)
+    validate.days(days)
+    validate.currency(currency)
+    validate.refund_address(refund_address)
 
-    topup_dict = vmmanagement_client.topup(hostname=LOCALHOST,
-                                           machine_id=machine_id,
-                                           days=days,
-                                           currency=currency,
-                                           settlement_token=settlement_token)
+    topup_dict = virtual_machine_topup(machine_id=machine_id,
+                                       days=days,
+                                       currency=currency,
+                                       refund_address=refund_address,
+                                       settlement_token=settlement_token,
+                                       override_code=override_code)
     topup_dict['machine_id'] = machine_id
     return topup_dict
 

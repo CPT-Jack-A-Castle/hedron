@@ -1,6 +1,6 @@
 from mock import patch
 
-from vmmanagement_host_info import host_info
+from vmmanagement_baremetal import host_info
 from vmmanagement_create_test import generic_valid_config
 
 

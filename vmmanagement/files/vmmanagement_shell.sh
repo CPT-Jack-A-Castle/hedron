@@ -81,9 +81,8 @@ stop() {
 }
 
 help() {
-    echo 'USAGE: create, topup, start, stop, bootorder, ipxescript, serialconsole, help'
-    echo 'All command except create are to be followed by the machine_id.'
-    echo 'create takes json via stdin.'
+    echo 'USAGE: start, stop, bootorder, ipxescript, serialconsole, help'
+    echo 'All commands are to be followed by the machine_id.'
 }
 
 status() {
@@ -108,7 +107,8 @@ exists() {
 }
 
 # This is intended to implement the absolute minimum of services for a VPS.
-# create, topup, info, stop, start, bootorder, ipxescript, serialconsole
+# **This is being replaced by vmmanagement_baremetal**
+# info, stop, start, bootorder, ipxescript, serialconsole
 
 # As a shell, first argument is -c, then the rest follow.
 shift 2> /dev/null || help
@@ -121,8 +121,6 @@ ARGUMENTS=$1
 COMMAND=$(echo "$ARGUMENTS" | cut -d ' ' -f 1)
 MACHINE_ID=$(echo "$ARGUMENTS" | cut -d ' ' -f 2)
 
-# FIXME: Blegh.
-if [ "$COMMAND" != 'create' ]; then
 if [ "$COMMAND" != 'host_info' ]; then
 if [ "$COMMAND" != 'help' ]; then
     echo "$MACHINE_ID" | grep -qF . && fail 'Invalid machine_id charaters.'
@@ -130,16 +128,8 @@ if [ "$COMMAND" != 'help' ]; then
     cd "$MACHINE_ID" 2> /dev/null || fail 'machine does not exist.'
 fi
 fi
-fi
 
-# FIXME: Add notice about 4,000 byte limit!
 case $COMMAND in
-    create)
-        head -c 4000 | vmmanagement_create
-        ;;
-    topup)
-        head -c 4000 | vmmanagement_topup
-        ;;
     host_info)
         vmmanagement_host_info
         ;;

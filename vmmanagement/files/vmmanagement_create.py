@@ -1,7 +1,8 @@
-#!/usr/bin/python3 -E
+"""
+Only requests for VMs to be made, doesn't actually make them.
 
-# This can be ran by *anyone* and does not make the VM, only issues
-# a request for one to be made.
+Also used as a common utils library for now.
+"""
 
 import sys
 import json
@@ -421,6 +422,9 @@ def payment(machine_id,
             statsd.gauge('payment.cents.{}'.format(currency),
                          cents,
                          delta=True)
+
+    msg = 'payment() attempt: Currency: {} Amount: {} Cents: {}'
+    logging.info(msg.format(currency, amount, cents))
     return txid, amount
 
 
@@ -607,41 +611,3 @@ def virtual_machine_create(machine_id,
 
     # created and paid should always be the same, True or False.
     return return_data
-
-
-if __name__ == '__main__':
-    input = json.loads(sys.stdin.read())
-    machine_id = input['machine_id']
-    days = input['days']
-    ipv4 = input['ipv4']
-    ipv6 = input['ipv6']
-    bandwidth = input['bandwidth']
-    memory = input['memory']
-    disk = input['disk']
-    cores = input['cores']
-    currency = input['currency']
-    refund_address = input['refund_address']
-    override_code = input['override_code']
-    settlement_token = input['settlement_token']
-    qemuopts = input['qemuopts']
-    managed = input['managed']
-    hostaccess = input['hostaccess']
-    organization = input['organization']
-
-    output = virtual_machine_create(machine_id=machine_id,
-                                    days=days,
-                                    memory=memory,
-                                    disk=disk,
-                                    cores=cores,
-                                    ipv4=ipv4,
-                                    ipv6=ipv6,
-                                    bandwidth=bandwidth,
-                                    currency=currency,
-                                    refund_address=refund_address,
-                                    override_code=override_code,
-                                    settlement_token=settlement_token,
-                                    qemuopts=qemuopts,
-                                    managed=managed,
-                                    organization=organization,
-                                    hostaccess=hostaccess)
-    print(json.dumps(output))
