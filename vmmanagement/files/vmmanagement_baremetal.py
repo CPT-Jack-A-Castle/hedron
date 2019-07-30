@@ -230,6 +230,13 @@ def bootorder(machine_id, bootorder, host=None):
                                          bootorder=bootorder)
 
 
+@hug.post('/delete', versions=2)
+def delete(machine_id, host=None):
+    validate.machine_id(machine_id)
+    logging.info('Delete request for: {}'.format(machine_id))
+    raise NotImplementedError('Not implemented')
+
+
 @hug.exception(ValueError)
 @hug.exception(TypeError)
 def hug_handle_exception(exception, response):
