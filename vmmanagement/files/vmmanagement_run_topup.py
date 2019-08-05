@@ -42,6 +42,7 @@ def topup(options):
     machine_id = options['machine_id']
     expiration = options['expiration']
     currency = options['currency']
+    # Here we take a single txid as string.
     txid = options['txid']
 
     vm_data = hedron.virtual_machine_info(options['machine_id'])
@@ -49,7 +50,15 @@ def topup(options):
 
     vm_data['expiration'] = expiration
     vm_data['currency'] = currency
-    vm_data['txid'] = txid
+    # Legacy support as of 2019-08-05
+    # Not likely one to be removed in the next year.
+    if isinstance(vm_data['txid'], str):
+        first_txid = vm_data['txid']
+        vm_data['txid'] = [first_txid, txid]
+    elif isinstance(vm_data['txid'], list):
+        vm_data['txid'].append(txid)
+    else:
+        vm_data['txid'] = [txid]
 
     directory = '/var/tmp/runqemu/{}'.format(machine_id)
     json_file = os.path.join(directory, 'settings.json')

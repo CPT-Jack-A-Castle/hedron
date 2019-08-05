@@ -6,7 +6,7 @@ valid_id = '01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b'
 
 valid_options = {'machine_id': valid_id,
                  'currency': None,
-                 'txid': None,
+                 'txid': ['txid'],
                  'expiration': 1000}
 
 

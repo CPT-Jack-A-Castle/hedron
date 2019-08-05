@@ -4,3 +4,5 @@ include:
   - .buster
   - .ubuntu-desktop
   - .coreos
+  - .mfsbsd
+  - .openbsd

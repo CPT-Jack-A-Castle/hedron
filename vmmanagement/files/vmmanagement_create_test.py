@@ -156,6 +156,8 @@ def test_existing_txids(mock_list_virtual_machines,
     assert existing_txids('settlement') == []
     assert existing_txids('btc') == ['just a txid', 'just a txid']
     assert existing_txids('bch') == ['just a txid', 'just a txid']
+    mock_virtual_machine_info.return_value = {'txid': ['txid 1', 'txid 2']}
+    assert existing_txids('btc') == ['txid 1', 'txid 2', 'txid 1', 'txid 2']
     mock_virtual_machine_info.return_value = {}
     assert existing_txids('bsv') == []
 
@@ -196,10 +198,18 @@ def test_payment():
                                    address=bch_address,
                                    currency='bch',
                                    existing_txids=[])
+    bsv_txid, bsv_amount = payment(machine_id='machine id',
+                                   cents=50,
+                                   address='1xm4vFerV3pSgvBFkyzLgT1Ew3HQYrS1V',
+                                   currency='bsv',
+                                   existing_txids=[])
     assert btc_txid is None
     assert bch_txid is None
+    assert bsv_txid is None
     # Good test while BCH is lower than BTC
     assert bch_amount > btc_amount
+    # Good test while BSV is lower than BCH (so more Satoshis)
+    assert bch_amount < bsv_amount
 
 
 @raises(ValueError)

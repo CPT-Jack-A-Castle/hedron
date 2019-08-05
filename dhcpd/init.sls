@@ -2,7 +2,6 @@ hedron_dhcpd_package:
   pkg.installed:
     - name: isc-dhcp-server
 
-
 hedron_dhcpd_kill_default_service:
   service.dead:
     - name: isc-dhcpd-server
@@ -19,3 +18,7 @@ hedron_dhcpd_service_file:
   file.managed:
     - name: /etc/systemd/system/dhcpd@.service
     - source: salt://hedron/dhcpd/files/dhcpd@.service
+
+hedron_dhcpd_delete_initd_service_file:
+  file.absent:
+    - name: /etc/init.d/isc-dhcp-server

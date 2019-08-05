@@ -17,7 +17,7 @@ hedron_vmmanagement_pip_dependencies:
   pip.installed:
     - pkgs:
       - paramiko
-      - bitcoinacceptor>=0.3.0
+      - bitcoinacceptor>=0.3.1
       - pytest
       - hug
       - requests

@@ -317,7 +317,13 @@ def existing_txids(currency):
         if 'txid' not in vm_info:
             continue
 
-        txids.append(vm_info['txid'])
+        # Legacy support. 2019-08-05
+        if isinstance(vm_info['txid'], str):
+            txids.append(vm_info['txid'])
+        elif isinstance(vm_info['txid'], list):
+            for txid in vm_info['txid']:
+                txids.append(txid)
+
     return txids
 
 
@@ -413,10 +419,11 @@ def payment(machine_id,
                                                    unique=machine_id,
                                                    currency=currency,
                                                    first_price=first,
-                                                   second_price=second)
+                                                   second_price=second,
+                                                   txids=existing_txids)
         txid = btcacceptor.txid
         amount = btcacceptor.satoshis
-        if btcacceptor.txid is False or txid in existing_txids:
+        if btcacceptor.txid is False:
             txid = None
         else:
             statsd.gauge('payment.cents.{}'.format(currency),
@@ -595,7 +602,7 @@ def virtual_machine_create(machine_id,
                      'managed': managed,
                      'expiration': expiration,
                      'currency': currency,
-                     'txid': return_data['txid']}
+                     'txid': [return_data['txid']]}
     return_data['expiration'] = expiration
     return_data['bandwidth'] = granted_bandwidth
     if return_data['paid'] is True:
