@@ -9,7 +9,7 @@ import traceback
 
 import hug
 import statsd as libstatsd
-from falcon import HTTP_400, HTTP_500
+from falcon import HTTP_400, HTTP_415, HTTP_500
 from sporestackv2 import validate
 
 import vmmanagement_create
@@ -235,6 +235,13 @@ def delete(machine_id, host=None):
     validate.machine_id(machine_id)
     logging.info('Delete request for: {}'.format(machine_id))
     raise NotImplementedError('Not implemented')
+
+
+@hug.exception(NotImplementedError)
+def hug_handle_not_implemented_exception(exception, response):
+    response.status = HTTP_415
+    logging.warning(exception)
+    return str(exception)
 
 
 @hug.exception(ValueError)
