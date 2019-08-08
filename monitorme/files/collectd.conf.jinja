@@ -4,12 +4,9 @@ LoadPlugin df
 LoadPlugin disk
 LoadPlugin entropy
 LoadPlugin interface
-LoadPlugin irq
 LoadPlugin load
 LoadPlugin memory
-LoadPlugin ping
 LoadPlugin processes
-LoadPlugin rrdtool
 LoadPlugin statsd
 LoadPlugin swap
 LoadPlugin users
@@ -28,11 +25,8 @@ LoadPlugin write_graphite
         FSType cgroup
         IgnoreSelected true
 </Plugin>
-<Plugin rrdtool>
-        DataDir "/var/lib/collectd/rrd"
-</Plugin>
 <Plugin statsd>
-        Host "::"
+        Host "localhost"
         Port "8125"
         DeleteCounters false
         DeleteTimers   false

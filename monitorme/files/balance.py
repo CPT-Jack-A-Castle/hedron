@@ -43,6 +43,11 @@ def balance(currency, address):
     logging.info('Balance for {} on {}: {}'.format(address, currency, balance))
     statsd.gauge('balance.{}.{}'.format(currency, address), balance)
 
+    balance_usd = float(walkingliberty.balance(address, unit="usd"))
+    msg = 'USD balance for {} on {}: {}'.format(address, currency, balance_usd)
+    logging.info(msg)
+    statsd.gauge('balance_usd.{}.{}'.format(currency, address), balance_usd)
+
 
 @cli.cmd
 @cli.cmd_arg('--config_file', type=str, default=CONFIG_FILE)

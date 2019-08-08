@@ -1,0 +1,10 @@
+[Unit]
+Description=collectd
+[Service]
+DynamicUser=yes
+ExecStart=/usr/sbin/collectd -f
+ProtectSystem=strict
+NoNewPrivileges=yes
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

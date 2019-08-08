@@ -15,3 +15,6 @@ hedron_memcached_service:
     - enable: True
     - watch:
       - file: /etc/memcached.conf
+
+# This should be updated to work with unix sockets out of /run that can be locked down. Otherwise, any user can put dangerous data in the cache.
+# Alternative: Use a program-local cache.
