@@ -1,4 +1,6 @@
 include:
+  - hedron.burnpaste
+  - hedron.ipxeplease
   - hedron.uwsgi3
   - hedron.nginx
 

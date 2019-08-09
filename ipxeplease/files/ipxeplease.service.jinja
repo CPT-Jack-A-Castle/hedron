@@ -1,0 +1,12 @@
+[Unit]
+Description=ipxeplease IPXE script service
+After=burnpaste.service
+[Service]
+DynamicUser=yes
+ExecStart=/usr/local/bin/ipxeplease web :5555 http://{% include '/etc/tor/hiddenservice_vmmanagement_baremetal/hostname' %}/
+ProtectSystem=strict
+NoNewPrivileges=yes
+UMask=0077
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

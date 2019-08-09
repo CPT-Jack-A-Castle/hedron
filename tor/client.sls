@@ -1,4 +1,5 @@
-# FIXME: This only works if the tor state has already been called.
+include:
+  - hedron.tor
 
 hedron_tor_client_config:
   file.managed:
