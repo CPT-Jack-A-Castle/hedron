@@ -8,7 +8,7 @@ hedron_docker_apt_deps:
   pkg.installed:
     - pkgs:
       - apt-transport-https
-      - python-apt
+      - python3-apt
       - ca-certificates
       - curl
       - gnupg2
