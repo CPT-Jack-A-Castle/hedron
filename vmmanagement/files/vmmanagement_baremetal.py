@@ -8,6 +8,7 @@ import logging
 import traceback
 
 import hug
+import ipxeplease
 import statsd as libstatsd
 from falcon import HTTP_400, HTTP_415, HTTP_500
 from sporestackv2 import validate
@@ -22,6 +23,19 @@ logging.basicConfig(level=logging.INFO)
 statsd = libstatsd.StatsClient('localhost', 8125)
 
 LOCALHOST = '127.0.0.1'
+
+# Should not end with a /
+IPXEPLEASE_ENDPOINT = 'http://localhost'
+
+
+def operating_systems(endpoint=IPXEPLEASE_ENDPOINT):
+    return ipxeplease.operating_systems(endpoint=endpoint)
+
+
+def ipxe(operating_system, ssh_key, endpoint=IPXEPLEASE_ENDPOINT):
+    return ipxeplease.ipxe(operating_system=operating_system,
+                           ssh_key=ssh_key,
+                           endpoint=endpoint)
 
 
 @hug.get('/host_info', versions=2)
@@ -55,9 +69,19 @@ def host_info():
                    'max_disk_per_vm': config['max_disk_per_vm'],
                    'max_memory_per_vm': config['max_memory_per_vm'],
                    'max_days': config['max_days'],
-                   'features': ['ipxe']}
+                   'operating_systems': operating_systems(),
+                   'features': ['ipxe', 'operating_system']}
 
     return return_dict
+
+
+def validate_extra_ssh_and_os(ssh_key, operating_system):
+    if ssh_key is None and operating_system is None:
+        return True
+    if ssh_key is None or operating_system is None:
+        msg = 'ssh_key and operating_system must both be string or null.'
+        raise ValueError(msg)
+    return True
 
 
 @hug.post('/launch', versions=2)
@@ -100,6 +124,23 @@ def launch(machine_id,
     validate.ipxescript(ipxescript)
     validate.region(region)
 
+    validate.ssh_key(ssh_key)
+    validate.operating_system(operating_system)
+
+    validate_extra_ssh_and_os(ssh_key=ssh_key,
+                              operating_system=operating_system)
+
+    os_list = operating_systems()
+    if operating_system is not None:
+        if operating_system not in os_list:
+            msg = 'operating_system must be one of {} on this host'
+            msg = msg.format(os_list)
+            raise ValueError(msg)
+
+    if operating_system is None and ipxescript is None:
+        msg = 'operating_system and ssh_key must be set, and/or ipxescript'
+        raise ValueError(msg)
+
     if region is not None:
         raise ValueError('Only None region supported for this host.')
 
@@ -127,6 +168,12 @@ def launch(machine_id,
     if created_dict['paid'] is True:
         if vmmanagement_client.exists(LOCALHOST, machine_id) is not True:
             raise Exception('VM created but does not exist??')
+        if ipxescript is None:
+            ipxe_output = ipxe(operating_system=operating_system,
+                               ssh_key=ssh_key)
+            ipxescript = ipxe_output['script']
+            created_dict['generated_ipxescript'] = ipxe_output['script']
+            created_dict['root_password'] = ipxe_output['root_password']
         vmmanagement_client.ipxescript(LOCALHOST, machine_id, ipxescript)
         vmmanagement_client.start(LOCALHOST, machine_id)
 

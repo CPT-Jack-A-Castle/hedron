@@ -23,4 +23,5 @@ hedron_vmmanagement_pip_dependencies:
       - requests
       - statsd
       - sshpubkeys
+      - ipxeplease
     - bin_env: /usr/bin/pip3

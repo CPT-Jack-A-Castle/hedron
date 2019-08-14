@@ -3,7 +3,7 @@ Description=ipxeplease IPXE script service
 After=burnpaste.service
 [Service]
 DynamicUser=yes
-ExecStart=/usr/local/bin/ipxeplease web :5555 http://{% include '/etc/tor/hiddenservice_vmmanagement_baremetal/hostname' %}/
+ExecStart=/usr/local/bin/ipxeplease web :5555 http://{% include '/etc/tor/hiddenservice_vmmanagement_baremetal/hostname' ignore missing %}/
 ProtectSystem=strict
 NoNewPrivileges=yes
 UMask=0077
