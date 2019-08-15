@@ -12,8 +12,3 @@ shopt -s checkwinsize
 PS1='\u@\h:\w\$ '
 
 export EDITOR='vi'
-
-# Maybe this isn't the best for what we want.
-for script in /etc/bash.d/*; do
-    [ -x "$script" ] && /etc/bash.d/browser.sh
-done

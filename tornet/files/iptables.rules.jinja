@@ -21,7 +21,6 @@
 -A OUTPUT -m owner --uid-owner "notor" -j RETURN
 -A OUTPUT -m owner --gid-owner "openvpn" -j RETURN
 -A OUTPUT -m owner --gid-owner "systemd-network" -j RETURN
--A OUTPUT -m owner --gid-owner "systemd-timesync" -j RETURN
 {% for slot in range(4000, 4060 + 1) %}
 -A OUTPUT -m owner --gid-owner "slot{{ slot }}" -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports 1{{ slot }}
 {% endfor %}
@@ -59,7 +58,6 @@ COMMIT
 -A OUTPUT -m owner --uid-owner "notor" -j ACCEPT
 -A OUTPUT -m owner --gid-owner "openvpn" -j ACCEPT
 -A OUTPUT -m owner --gid-owner "systemd-network" -j ACCEPT
--A OUTPUT -m owner --gid-owner "systemd-timesync" -j ACCEPT
 -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A OUTPUT -m conntrack --ctstate INVALID -j DROP
 # Packets without a uid owner should be from the kernel. For example, ICMPv6 replies.

@@ -36,14 +36,6 @@ hedron_base_proc_restrictions:
     - fstype: proc
     - opts: nosuid,nodev,noexec,hidepid=2
 
-# Remove these. If install fails and you retry, it can install extra packages that cause problems.
-hedron_base_packages_purged:
-  pkg.purged:
-    - pkgs:
-      - network-manager
-      - gnome-terminal
-      - console-setup-linux
-
 # Install these on all systems.
 
 # gnupg2 is for apt-key add on Debian 10
@@ -75,6 +67,7 @@ hedron_base_packages:
       - mtr-tiny
       - bind9-host
       - gnupg2
+      - ntp
 
 hedron_base_var_empty:
   file.directory:

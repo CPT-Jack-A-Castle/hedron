@@ -9,12 +9,9 @@ include:
   - hedron.ipxe_scripts
   - hedron.vmmanagement
 
-# openntpd won't work out of the box as it doesn't run as its own user.
-# FIXME: looks like systemd-timesyncd already runs anyway?
 hedron_qemu_packages:
   pkg.installed:
     - pkgs:
-      - ntp
       - picocom
       - qemu-kvm
       - qemu-utils
