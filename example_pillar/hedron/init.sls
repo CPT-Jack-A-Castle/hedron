@@ -19,5 +19,6 @@ include:
   - hedron.namesilo
   - hedron.monitoring
   - hedron.monitorme
+  - hedron.rqlited
   - hedron.ucarp
   - hedron.vmmanagement
