@@ -6,7 +6,7 @@ include:
 hedron_rqlite_auth:
   file.serialize:
     - name: /etc/rqlited/auth.json
-    - dataset_pillar: hedron.hivemind
+    - dataset_pillar: hedron.rqlited.auth
     - mode: 0640
     - user: root
     - group: rqlite
@@ -14,6 +14,9 @@ hedron_rqlite_auth:
     - makedirs: True
 {% endif %}
 
+# Lots of security issues here.
+# https://github.com/systemd/systemd/issues/13333
+# Mode 0600 wouldn't fix it.
 hedron_rqlite_service_file:
   file.managed:
     - name: /etc/systemd/system/rqlited.service
@@ -23,7 +26,7 @@ hedron_rqlite_service_file:
         [Service]
         User=rqlite
         Group=rqlite
-        ExecStart=/usr/local/bin/rqlited /var/lib/rqlited {% if 'hedron.rqlited.options' in pillar %}{{ pillar['hedron.rqlited.options'] }}{% endif %}
+        ExecStart=/usr/local/bin/rqlited {% if 'hedron.rqlited.options' in pillar %}{{ pillar['hedron.rqlited.options'] }}{% endif %} /var/lib/rqlited
         UMask=0077
         Restart=on-failure
         NoNewPrivileges=yes
