@@ -276,6 +276,15 @@ def test_cost_in_cents(mock_get_config):
                          ipv4=False,
                          ipv6=False,
                          bandwidth=0) == 50
+    # minimum cents per day, two days.
+    our_config['minimum_cents_per_day'] = 50
+    assert cost_in_cents(days=2,
+                         cores=1,
+                         memory=1,
+                         disk=1,
+                         ipv4=False,
+                         ipv6=False,
+                         bandwidth=0) == 100
     # minimum cents per day + settlement, should still discount
     assert cost_in_cents(days=1,
                          cores=1,

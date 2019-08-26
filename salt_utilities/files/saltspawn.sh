@@ -22,9 +22,10 @@ sleep 5
 
 keyplease generate "$SALTHOSTNAME"
 PUB_KEY_FILE=$(keyplease public "$SALTHOSTNAME")
-PUB_KEY="$(cat "$PUB_KEY_FILE")"
 
-salt/hedron/ipxe_scripts/files/ipxe-stretch.sh "$PUB_KEY_FILE" | sporestackv2 launch --ipxescript_stdin True --ipv4 /32 --ipv6 /128 --bandwidth 1 --memory 1 --disk 10 --cores 1 --currency "$CURRENCY" --walkingliberty_wallet "$WALKINGLIBERTY" --ssh_key "$PUB_KEY" --operating_system debian-9 "$SALTHOSTNAME" "$@"
+# salt/hedron/ipxe_scripts/files/ipxe-stretch.sh "$PUB_KEY_FILE" | sporestackv2 launch --ipxescript_stdin True --ipv4 /32 --ipv6 /128 --bandwidth 1 --memory 1 --disk 10 --cores 1 --currency "$CURRENCY" --walkingliberty_wallet "$WALKINGLIBERTY" --ssh_key "$PUB_KEY" --operating_system debian-9 "$SALTHOSTNAME" "$@"
+# We now support operating_system and ssh_key in vmmanagement_baremetal. There's some advantages to using it instead of iPXE (it, itself uses iPXE), so we will do that for now.
+sporestackv2 launch --ipv4 /32 --ipv6 /128 --bandwidth 1 --memory 1 --disk 10 --cores 1 --currency "$CURRENCY" --walkingliberty_wallet "$WALKINGLIBERTY" --ssh_key_file "$PUB_KEY_FILE" --operating_system debian-9 "$SALTHOSTNAME" "$@"
 
 # shellcheck disable=SC2029
 DNSHOSTNAME=$(sporestackv2 get_attribute "$SALTHOSTNAME" sshhostname)
