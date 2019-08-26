@@ -18,7 +18,6 @@ hedron_qemu_packages:
       - ssvnc
       - arptables
       - ebtables
-      - netcat-openbsd # For connecting to the unix socket serial consoles
 
 hedron_qemu_vncviewer_systemd:
   file.managed:

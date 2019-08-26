@@ -39,6 +39,7 @@ hedron_base_proc_restrictions:
 # Install these on all systems.
 
 # gnupg2 is for apt-key add on Debian 10
+# netcat-openbsd is for statsd and other uses.
 
 hedron_base_packages:
   pkg.installed:
@@ -68,6 +69,7 @@ hedron_base_packages:
       - bind9-host
       - gnupg2
       - ntp
+      - netcat-openbsd
 
 hedron_base_var_empty:
   file.directory:

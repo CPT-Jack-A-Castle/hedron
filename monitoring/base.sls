@@ -12,6 +12,11 @@ hedron_monitoring_carbon_config:
     - source: salt://hedron/monitoring/files/carbon.conf.jinja
     - template: jinja
 
+hedron_monitoring_carbon_storage_schemas_conf:
+  file.managed:
+    - name: /etc/carbon/storage-schemas.conf
+    - source: salt://hedron/monitoring/files/storage-schemas.conf
+
 hedron_monitoring_carbon_service:
   service.running:
     - name: carbon-cache

@@ -22,9 +22,18 @@ hedron_base_hostname_localhost:
       - 127.0.0.1
       - ::1
 
-# Not sure if we should keep this or detect if hedron.hosts has an entry and not write it if that's the case.
-# This controls the FQDN name.
-#hedron_base_hostname_minion_id:
-#  host.present:
-#    - name: {{ minion_id }}
-#    - ip: 127.0.1.1
+# Ugly, can be improved
+# This is important for installing the collectd package.
+{% if 'hedron.hosts' in pillar %}
+{% if minion_id not in pillar['hedron.hosts'] %}
+hedron_base_hostname_minion_id:
+  host.present:
+    - name: {{ minion_id }}
+    - ip: 127.0.1.1
+{% endif %}
+{% else %}
+hedron_base_hostname_minion_id:
+  host.present:
+    - name: {{ minion_id }}
+    - ip: 127.0.1.1
+{% endif %}
