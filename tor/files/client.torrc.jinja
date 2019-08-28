@@ -1,4 +1,8 @@
-SocksPort 9050 IPv6Traffic
+# This does not listen on ::1 by default.
+# https://trac.torproject.org/projects/tor/ticket/11360
+#SocksPort 9050 IPv6Traffic
+SocksPort 127.0.0.1:9050 IPv6Traffic
+SocksPort [::1]:9050 IPv6Traffic
 DataDirectory /run/tor_client
 ControlPort unix:/run/tor_client/control
 ClientUseIPv6 1

@@ -1,6 +1,6 @@
 # Built from https://github.com/teran-mckinney/ipxeplease
 
-{% set hash = '27fba429b3948dea7bd25c9b80b500b9e012de27b3a31cab9a9e1aab98e12c84' %}
+{% set hash = 'e54faa7da702def1aaf17093416aa48cb7be1d72ae3888eccacbba4120d38d6b' %}
 
 hedron_ipxeplease_installed:
   file.managed:

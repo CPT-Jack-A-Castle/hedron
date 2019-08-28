@@ -41,3 +41,4 @@ hedron_tor_client_service_running:
     - enable: True
     - watch:
       - file: /etc/systemd/system/tor_client.service
+      - file: /etc/tor/client.torrc
