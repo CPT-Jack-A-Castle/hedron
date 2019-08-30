@@ -8,8 +8,8 @@ hedron_golang_archive:
     - name: /srv/salt/dist/golang.tar.gz
     - source:
       - salt://dist/golang.tar.gz
-      - https://dl.google.com/go/go1.12.8.linux-amd64.tar.gz
-    - source_hash: bd26cd4962a362ed3c11835bca32c2e131c2ae050304f2c4df9fa6ded8db85d2
+      - https://dl.google.com/go/go1.12.9.linux-amd64.tar.gz
+    - source_hash: ac2a6efcc1f5ec8bdc0db0a988bb1d301d64b6d61b7e8d9e42f662fbb75a2b9b
     - makedirs: True
 
 hedron_golang_directory:
