@@ -1,5 +1,5 @@
 [Unit]
-Description=sslexpirystatsd %I minutely
+Description=sslexpirystatsd minutely
 [Timer]
 OnCalendar=minutely
 [Install]

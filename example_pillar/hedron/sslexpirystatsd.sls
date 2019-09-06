@@ -1,2 +1,3 @@
-hedron.sslexpirystatsd.hosts:
-  - vagabondworkstation.github.io:443
+hedron.sslexpirystatsd:
+  hosts:
+    - vagabondworkstation.github.io:443

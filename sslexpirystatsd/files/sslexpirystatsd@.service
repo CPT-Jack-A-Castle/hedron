@@ -1,9 +1,0 @@
-[Unit]
-Description=sslexpirycstatsd for %I
-[Service]
-DynamicUser=yes
-Type=oneshot
-TimeoutSec=300
-ExecStart=/usr/local/bin/sslexpirystatsd checkstatsd %I
-[Install]
-WantedBy=multi-user.target

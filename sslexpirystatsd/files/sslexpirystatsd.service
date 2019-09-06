@@ -1,0 +1,9 @@
+[Unit]
+Description=sslexpirystatsd
+[Service]
+DynamicUser=yes
+Type=oneshot
+TimeoutSec=50
+ExecStart=/usr/local/bin/sslexpirystatsd checkstatsdconfiguration /etc/sslexpirystatsd.json
+[Install]
+WantedBy=multi-user.target
