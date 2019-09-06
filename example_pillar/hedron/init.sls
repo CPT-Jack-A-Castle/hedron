@@ -12,6 +12,7 @@ include:
   - hedron.organization
   - hedron.cpuminer
   - hedron.sporestack
+  - hedron.sslexpirystatsd
   - hedron.tor
   - hedron.tor_persistent_keys
   - hedron.desktop

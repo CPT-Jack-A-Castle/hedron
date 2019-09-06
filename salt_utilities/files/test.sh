@@ -12,7 +12,7 @@ find -L . -type d -name '__pycache__' | grep __pycache__ && false
 
 echo "Testing for lines ending with a space."
 
-grep -R ' $' --exclude-dir .git --exclude-dir dist --exclude '*.mozlz4' --exclude '*.png' . && false
+grep -R ' $' --exclude-dir .git --exclude-dir dist --exclude '*.mozlz4' --exclude '*.png' --exclude '*.ico' . && false
 
 echo "shellcheck'ing shell scripts."
 find -L . -type f -name '*.sh' | while read -r shell_script; do

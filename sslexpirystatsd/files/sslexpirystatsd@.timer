@@ -1,0 +1,6 @@
+[Unit]
+Description=sslexpirystatsd %I minutely
+[Timer]
+OnCalendar=minutely
+[Install]
+WantedBy=multi-user.target
