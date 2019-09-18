@@ -164,6 +164,10 @@ def launch(machine_id,
                       hostaccess=hostaccess)
 
     created_dict = create_vm()
+    created_dict['cores'] = cores
+    created_dict['memory'] = memory
+    created_dict['disk'] = disk
+
     # paid and created should always be the same.
     if created_dict['paid'] is True:
         if vmmanagement_client.exists(LOCALHOST, machine_id) is not True:
