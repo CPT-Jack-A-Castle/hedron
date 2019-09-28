@@ -1,0 +1,14 @@
+[Unit]
+Description=Monero RPC Custom Wallet: %I
+
+[Service]
+User=monero
+Nice=18
+ExecStart=/home/monero/%I
+ProtectSystem=full
+NoNewPrivileges=true
+Environment=HOME=/home/monero
+WorkingDirectory=/home/monero
+
+[Install]
+WantedBy=multi-user.target

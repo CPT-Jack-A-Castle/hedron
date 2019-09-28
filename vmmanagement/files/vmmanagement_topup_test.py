@@ -24,3 +24,6 @@ def test_topup_vm_and_wait(mock_topup_vm,
     with pytest.raises(ValueError):
         vmmanagement_topup.topup_vm_and_wait({'machine_id': 'justamachine',
                                               'expiration': 901})
+
+# This is minimal. We should test payments at least, like we do with
+# vmmanagement_create.

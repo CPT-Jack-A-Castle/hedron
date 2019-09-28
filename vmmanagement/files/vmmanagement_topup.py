@@ -127,19 +127,17 @@ def virtual_machine_topup(machine_id,
                               currency=currency)
         logging.info('Cost in cents: {}'.format(cents))
         token = settlement_token
-        txid, amount = payment(machine_id,
-                               currency,
-                               cents,
-                               address,
-                               existing_txids=existing_txids(currency),
-                               settlers_endpoint=config['settlers_endpoint'],
-                               settlers_customer_token=token)
-        return_data['txid'] = txid
-        return_data['payment']['amount'] = amount
-        uri = utilities.payment_to_uri(address=address,
-                                       currency=currency,
-                                       amount=amount)
-        return_data['payment']['uri'] = uri
+        pay = payment(machine_id,
+                      currency,
+                      cents,
+                      address,
+                      existing_txids=existing_txids(currency),
+                      settlers_endpoint=config['settlers_endpoint'],
+                      settlers_customer_token=token,
+                      monero_rpc=config['monero_rpc'])
+        return_data['txid'] = pay.txid
+        return_data['payment']['amount'] = pay.amount
+        return_data['payment']['uri'] = pay.uri
         return_data['payment']['usd'] = utilities.cents_to_usd(cents)
 
         if return_data['txid'] is not None:

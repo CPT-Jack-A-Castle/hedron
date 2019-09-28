@@ -10,6 +10,7 @@ import os
 import logging
 import time
 import ipaddress
+from collections import namedtuple
 
 import statsd as libstatsd
 import bitcoinacceptor
@@ -102,6 +103,8 @@ def validate_config(config):
 def get_config():
     with open(CONFIG_FILE) as json_file:
         config = json.load(json_file)
+    if 'monero_rpc' not in config:
+        config['monero_rpc'] = None
     return config
 
 
@@ -396,10 +399,12 @@ def payment(machine_id,
             address,
             existing_txids=[],
             settlers_endpoint=None,
-            settlers_customer_token=None):
+            settlers_customer_token=None,
+            monero_rpc=None):
     """
     Return txid (None or string), amount (in Satoshis or cents, depending).
     """
+    output = namedtuple('pay', ['txid', 'amount', 'uri'])
     if currency == 'settlement':
         settlers_business_token = address
 
@@ -409,8 +414,9 @@ def payment(machine_id,
                           customer_token=settlers_customer_token,
                           endpoint=settlers_endpoint)
 
-        txid = 'settlement'
-        amount = cents
+        output.txid = 'settlement'
+        output.amount = cents
+        output.uri = None
     else:
         first, second = fiat_per_coin.get(currency)
         # machine_id gets hashed as the unique so it should be safe.
@@ -420,19 +426,21 @@ def payment(machine_id,
                                                    currency=currency,
                                                    first_price=first,
                                                    second_price=second,
-                                                   txids=existing_txids)
-        txid = btcacceptor.txid
-        amount = btcacceptor.satoshis
+                                                   txids=existing_txids,
+                                                   monero_rpc=monero_rpc)
+        output.txid = btcacceptor.txid
+        output.amount = btcacceptor.satoshis
+        output.uri = btcacceptor.uri
+        msg = 'payment() attempt: URI: {} Cents: {}'
+        logging.info(msg.format(output.uri, cents))
         if btcacceptor.txid is False:
-            txid = None
+            output.txid = None
         else:
             statsd.gauge('payment.cents.{}'.format(currency),
                          cents,
                          delta=True)
 
-    msg = 'payment() attempt: Currency: {} Amount: {} Cents: {}'
-    logging.info(msg.format(currency, amount, cents))
-    return txid, amount
+    return output
 
 
 @statsd.timer('virtual_machine_create')
@@ -570,19 +578,17 @@ def virtual_machine_create(machine_id,
                               override=override(override_code))
         logging.info('Cost in cents: {}'.format(cents))
         token = settlement_token
-        txid, amount = payment(machine_id,
-                               currency,
-                               cents,
-                               address,
-                               existing_txids=existing_txids(currency),
-                               settlers_endpoint=config['settlers_endpoint'],
-                               settlers_customer_token=token)
-        return_data['txid'] = txid
-        return_data['payment']['amount'] = amount
-        uri = utilities.payment_to_uri(address=address,
-                                       currency=currency,
-                                       amount=amount)
-        return_data['payment']['uri'] = uri
+        pay = payment(machine_id,
+                      currency,
+                      cents,
+                      address,
+                      existing_txids=existing_txids(currency),
+                      settlers_endpoint=config['settlers_endpoint'],
+                      settlers_customer_token=token,
+                      monero_rpc=config['monero_rpc'])
+        return_data['txid'] = pay.txid
+        return_data['payment']['amount'] = pay.amount
+        return_data['payment']['uri'] = pay.uri
         return_data['payment']['usd'] = utilities.cents_to_usd(cents)
 
         if return_data['txid'] is not None:

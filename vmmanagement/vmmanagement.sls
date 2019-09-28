@@ -16,6 +16,7 @@ hedron_vmmanagement_vmmanagement_override_code:
     - creates: /etc/vmmanagement.override_code
     - umask: 0077
 
+# This is so hacky. Needs to be replaced with file.serialize eventually.
 # Always generate the latest sample config.
 hedron_vmmanagement_vmmanagement_config_sample:
   file.managed:

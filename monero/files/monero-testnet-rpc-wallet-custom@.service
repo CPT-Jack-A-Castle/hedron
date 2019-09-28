@@ -1,0 +1,14 @@
+[Unit]
+Description=Monero Testnet RPC Custom Wallet: %I
+
+[Service]
+User=monero-testnet
+Nice=18
+ExecStart=/home/monero-testnet/%I
+ProtectSystem=full
+NoNewPrivileges=true
+Environment=HOME=/home/monero-testnet
+WorkingDirectory=/home/monero-testnet
+
+[Install]
+WantedBy=multi-user.target

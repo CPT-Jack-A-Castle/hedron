@@ -1,0 +1,23 @@
+[Unit]
+Description=Tor Hidden Service connecting to %I on localhost, publishing %I
+After=network.target
+
+[Service]
+User=debian-tor
+Group=67
+RuntimeDirectory=tor-localhost-hiddenservice-%I
+RuntimeDirectoryMode=0700
+ExecStart=/usr/sbin/tor --HiddenServiceDir /etc/tor/localhost-hiddenservice-%I --HiddenServiceVersion 3 --HiddenServicePort "%I 127.0.0.1:%I" --SocksPort 0 --DataDirectory /run/tor-localhost-hiddenservice-%I --ClientUseIPv6 1
+
+
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=yes
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
+
+
+[Install]
+WantedBy=multi-user.target

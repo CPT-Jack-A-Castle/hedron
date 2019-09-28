@@ -4,7 +4,7 @@ Description=Monero Node
 [Service]
 User=monero
 Nice=18
-ExecStart=/usr/local/monero/monerod --non-interactive --no-igd
+ExecStart=/usr/local/monero/monerod --non-interactive --no-igd --hide-my-port --proxy tor,127.0.0.1:9050,100
 ProtectSystem=full
 NoNewPrivileges=true
 

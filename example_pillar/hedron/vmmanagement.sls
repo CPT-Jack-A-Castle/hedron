@@ -7,3 +7,6 @@ hedron_vmmanagement_custom_networking: True
 hedron.vmmanagement.address_btc: 1aaaa
 hedron.vmmanagement.address_bch: bitcoincash:qqq
 hedron.vmmanagement.address_bsv: 1aaaa
+# This is very hacky.
+# When vmmanagement.json is switched to file.serialize, this should be switched to a proper dict.
+hedron.vmmanagement.monero_rpc: '{"host": "somerpchost", "port": 1337, "user": "someuser", "password": "somepassword"}'

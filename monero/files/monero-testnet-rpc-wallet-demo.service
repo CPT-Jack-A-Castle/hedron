@@ -1,0 +1,14 @@
+[Unit]
+Description=Monero Testnet RPC Demo Wallet
+
+[Service]
+User=monero-testnet
+Nice=18
+ExecStart=/usr/local/monero/monero-wallet-rpc --testnet --wallet-file demo-testnet-wallet --password "" --rpc-bind-port 6799 --daemon-ssl disabled --rpc-ssl disabled --rpc-login demouser:demopassword
+ProtectSystem=full
+NoNewPrivileges=true
+Environment=HOME=/home/monero-testnet
+WorkingDirectory=/home/monero-testnet
+
+[Install]
+WantedBy=multi-user.target

@@ -3,6 +3,8 @@ import pytest
 from mock import patch
 from nose.tools import raises
 
+# flake8: noqa E501
+
 import settlers_of_cryptotan as settlers
 from vmmanagement_create import (ipv4_range,
                                  days_to_expiration,
@@ -46,7 +48,8 @@ generic_valid_config = {'currencies': {'bch': bch_address},
                         'max_cores': 4,
                         'max_cores_per_vm': 2,
                         'max_disk_per_vm': 100,
-                        'max_memory_per_vm': 4}
+                        'max_memory_per_vm': 4,
+                        'monero_rpc': None}
 
 
 def test_validate_config():
@@ -188,28 +191,40 @@ def test_payment():
     """
     Checks if payment amounts are sane.
     """
-    btc_txid, btc_amount = payment(machine_id='machine id',
-                                   cents=50,
-                                   address='1xm4vFerV3pSgvBFkyzLgT1Ew3HQYrS1V',
-                                   currency='btc',
-                                   existing_txids=[])
-    bch_txid, bch_amount = payment(machine_id='machine id',
-                                   cents=50,
-                                   address=bch_address,
-                                   currency='bch',
-                                   existing_txids=[])
-    bsv_txid, bsv_amount = payment(machine_id='machine id',
-                                   cents=50,
-                                   address='1xm4vFerV3pSgvBFkyzLgT1Ew3HQYrS1V',
-                                   currency='bsv',
-                                   existing_txids=[])
-    assert btc_txid is None
-    assert bch_txid is None
-    assert bsv_txid is None
+    btc_pay = payment(machine_id='machine id',
+                      cents=50,
+                      address='1xm4vFerV3pSgvBFkyzLgT1Ew3HQYrS1V',
+                      currency='btc',
+                      existing_txids=[])
+    bch_pay = payment(machine_id='machine id',
+                      cents=50,
+                      address=bch_address,
+                      currency='bch',
+                      existing_txids=[])
+    bsv_pay = payment(machine_id='machine id',
+                      cents=50,
+                      address='1xm4vFerV3pSgvBFkyzLgT1Ew3HQYrS1V',
+                      currency='bsv',
+                      existing_txids=[])
+    assert btc_pay.txid is None
+    assert bch_pay.txid is None
+    assert bsv_pay.txid is None
     # Good test while BCH is lower than BTC
-    assert bch_amount > btc_amount
+    assert bch_pay.amount > btc_pay.amount
     # Good test while BSV is lower than BCH (so more Satoshis)
-    assert bch_amount < bsv_amount
+    assert bch_pay.amount < bsv_pay.amount
+    # testnet rpc test wallet
+    monero_rpc = {"host": "ssjulcg5dmz7itglkx2bdms7cdjfxtd2gjfqmooadehcbziogq7bvwqd.onion",
+                  "port": 6799,
+                  "user": "demouser",
+                  "password": "demopassword"}
+    xmr_pay = payment(machine_id='machine id',
+                      cents=50,
+                      address=None,
+                      currency='xmr',
+                      existing_txids=[],
+                      monero_rpc=monero_rpc)
+    assert xmr_pay.txid is None
 
 
 @raises(ValueError)
@@ -553,24 +568,24 @@ def test_payment_settlement_mocked(mock_rqlite_connection, mock_get_config):
                  business_token=business_token)
 
     # 39 cents...
-    txid, amount = payment(machine_id='machine id',
-                           address=business_token,
-                           cents=39,
-                           settlers_customer_token=customer_token,
-                           currency='settlement')
-    assert txid == 'settlement'
-    assert amount == 39
+    pay = payment(machine_id='machine id',
+                  address=business_token,
+                  cents=39,
+                  settlers_customer_token=customer_token,
+                  currency='settlement')
+    assert pay.txid == 'settlement'
+    assert pay.amount == 39
 
     assert settlers.balance(combined_token=combined) == 61
 
     # Should be able to get two payments out of it without issue.
-    txid, amount = payment(machine_id='machine id',
+    pay = payment(machine_id='machine id',
                            address=business_token,
                            cents=39,
                            settlers_customer_token=customer_token,
                            currency='settlement')
-    assert txid == 'settlement'
-    assert amount == 39
+    assert pay.txid == 'settlement'
+    assert pay.amount == 39
 
     assert settlers.balance(combined_token=combined) == 22
 

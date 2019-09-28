@@ -69,6 +69,11 @@ hedron_tor_base_service_file:
     - name: /lib/systemd/system/tor@.service
     - source: salt://hedron/tor/files/tor@.service
 
+hedron_tor_base_localhost_hiddenservice_service_file:
+  file.managed:
+    - name: /etc/systemd/system/tor-localhost-hiddenservice@.service
+    - source: salt://hedron/tor/files/tor-localhost-hiddenservice@.service
+
 # This is unused right now. Should consider adding it back in.
 hedron_tor_base_include_directory:
   file.directory:

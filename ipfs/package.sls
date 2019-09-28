@@ -5,7 +5,6 @@ hedron_ipfs_package_archive:
       - https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz
     - source_hash: 43431bbef105b1c8d0679350d6f496b934d005df28c13280a67f0c88054976aa
     - makedirs: True
-    - replace: False
 
 hedron_ipfs_package_directory:
   file.directory:
