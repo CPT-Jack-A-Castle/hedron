@@ -3,7 +3,8 @@ import pytest
 from mock import patch
 from nose.tools import raises
 
-# flake8: noqa E501
+# flake8's noqa option does not let you pick specific errors.
+# It just ignores the whole file.
 
 import settlers_of_cryptotan as settlers
 from vmmanagement_create import (ipv4_range,
@@ -214,7 +215,8 @@ def test_payment():
     # Good test while BSV is lower than BCH (so more Satoshis)
     assert bch_pay.amount < bsv_pay.amount
     # testnet rpc test wallet
-    monero_rpc = {"host": "ssjulcg5dmz7itglkx2bdms7cdjfxtd2gjfqmooadehcbziogq7bvwqd.onion",
+    host = "6eqrlligxznaerq52snzdzlcxujmd5pfxkodmdvtzdtayx4rfn3tgpyd.onion"
+    monero_rpc = {"host": host,
                   "port": 6799,
                   "user": "demouser",
                   "password": "demopassword"}
@@ -580,10 +582,10 @@ def test_payment_settlement_mocked(mock_rqlite_connection, mock_get_config):
 
     # Should be able to get two payments out of it without issue.
     pay = payment(machine_id='machine id',
-                           address=business_token,
-                           cents=39,
-                           settlers_customer_token=customer_token,
-                           currency='settlement')
+                  address=business_token,
+                  cents=39,
+                  settlers_customer_token=customer_token,
+                  currency='settlement')
     assert pay.txid == 'settlement'
     assert pay.amount == 39
 

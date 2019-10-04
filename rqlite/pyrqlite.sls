@@ -22,4 +22,4 @@ hedron_rqlite_pyrqlite_extract_and_install:
   cmd.run:
     - name: tar -xzf /srv/salt/dist/pyrqlite.tar.gz --strip-components=1; pip3 install .
     - cwd: /usr/local/src/pyrqlite
-    - creates: /usr/local/lib/python3.5/dist-packages/pyrqlite/__init__.py
+    - creates: {{ grains['hedron.python.dist.path'] }}/pyrqlite/__init__.py

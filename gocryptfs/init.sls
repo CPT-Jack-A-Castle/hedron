@@ -2,6 +2,7 @@ hedron_gocrypfs_dependencies:
   pkg.installed:
     - name: fuse
 
+# 1.7 has a bug with one_time_filesystem: https://github.com/rfjakob/gocryptfs/issues/427
 hedron_gocryptfs_file:
   file.managed:
     - name: /srv/salt/dist/gocryptfs.tar.gz

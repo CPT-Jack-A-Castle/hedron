@@ -6,6 +6,7 @@ include:
 # Instructions:
 # Run this state.
 # cd /usr/local/src/flaskbb
+# apt-get install make python-pip
 # make install
 # Answer questions, etc.
 # chown -R flaskbb:flaskbb /srv/flaskbb

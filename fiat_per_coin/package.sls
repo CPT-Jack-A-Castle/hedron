@@ -3,7 +3,7 @@ include:
 
 hedron_fiat_per_coin_library:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/fiat_per_coin.py
+    - name: {{ grains['hedron.python.dist.path'] }}/fiat_per_coin.py
     - source: salt://hedron/fiat_per_coin/files/fiat_per_coin.py
     - mode: 0644
 

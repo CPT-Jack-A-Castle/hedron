@@ -16,7 +16,7 @@ hedron_docker_apt_deps:
 
 hedron_docker_repository:
   pkgrepo.managed:
-    - name: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+    - name: deb [arch=amd64] https://download.docker.com/linux/debian {{ grains['oscodename'] }} stable
     - key_url: salt://hedron/docker/files/docker.asc
 
 hedron_docker_install:

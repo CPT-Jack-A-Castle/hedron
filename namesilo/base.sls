@@ -5,7 +5,7 @@ include:
 # FIXME: Switch to pip or something if possible.
 hedron_namesiren_base_dependency:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/namesilo.py
+    - name: {{ grains['hedron.python.dist.path'] }}/namesilo.py
     - source: salt://hedron/namesilo/files/namesilo.py
 
 hedron_namesiren_base_pip_dependencies:

@@ -9,7 +9,7 @@ def main():
     for path in sys.path:
         if '/usr/local/lib' in path:
             if 'dist-packages' in path:
-                grains['hedron_python_dist_path'] = path
+                grains['hedron.python.dist.path'] = path
                 return grains
 
-    raise Exception('Unable to find correct dist-path for Python.')
+    raise Exception('Unable to make grain hedron.python.dist.path')

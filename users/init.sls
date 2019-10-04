@@ -6,20 +6,11 @@ hedron_users_lock_out_debian:
     - name: debian
     - password: '!'
 
-# root password should be set at install time on some installs.
-# This lets us lock out root or keep that password, as needed.
-# VMs would probably want to be locked, workstation unlocked.
-{% if 'hedron_root_password_locked' in grains %}
-{% set lock_root = grains['hedron_root_password_locked'] %}
-{% else %}
-{% set lock_root = True %}
-{% endif %}
-
-{% if lock_root == True %}
-hedron_users_lock_root:
+{% if 'hedron.users.root_password' in pillar %}
+hedron_users_root_account:
   user.present:
     - name: root
-    - password: '!'
+    - password: '{{ pillar['hedron.users.root_password'] }}'
 {% endif %}
 
 ## Handle SSH keys installed by user who built the server. /root will become a tmpfs so this has to happen.

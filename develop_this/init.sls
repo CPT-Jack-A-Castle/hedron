@@ -3,7 +3,6 @@ include:
   - hedron.walkingliberty
   - hedron.sporestack
   - hedron.mega
-  - hedron.notbit.package
   - hedron.nginx
   - hedron.ngircd.package
   - hedron.vmmanagement
@@ -17,7 +16,6 @@ include:
   - hedron.keyplease
 
 # nginx package is for nginx config testing.
-# notbit package is for testing with sh imports.
 # ngircd package is for testing ngircd config files
 # dhcpd is for isc-dhcp-server is for checking dhcpd configuration files
 

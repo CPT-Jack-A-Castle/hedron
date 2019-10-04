@@ -3,6 +3,7 @@ include:
   - .bash
   - .hostname
   - .timezone
+  - .locale
   - hedron.networking.resolv_conf
   - hedron.sshd
   - hedron.users

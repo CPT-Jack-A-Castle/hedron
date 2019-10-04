@@ -1,21 +1,18 @@
-# Going to try installing it from pip now.
-
-# No buster version yet.
-
+# oscodename is stretch, buster, etc.
+# osmajorrelease is 9, 10, etc.
 hedron_saltstack_repo:
   pkgrepo.managed:
-    - name: deb http://repo.saltstack.com/py3/debian/9/amd64/2019.2 stretch main
+    - name: deb http://repo.saltstack.com/py3/debian/{{ grains['osmajorrelease'] }}/amd64/2019.2 {{ grains['oscodename'] }} main
     - key_url: salt://hedron/saltstack/files/saltstack.asc
 
-# With the pinned repository, pkg.latest should be ideal.
-# Although it's slower and they haven't updated it. Going back to installed for now.
+# With the pinned repository, pkg.latest should be ideal but it's much slower.
 hedron_saltstack_packages:
   pkg.installed:
     - pkgs:
       - salt-common
       - salt-ssh
 
-# This seems like it will work, but installing on the workstation is tricky because it needs autoconf and compiler stuff to build pycrypto and all.
+# This seems like it can work, but installing on the workstation is tricky because it needs autoconf and compiler stuff to build pycrypto and all.
 #include:
 #  - hedron.pip
 

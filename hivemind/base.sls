@@ -16,7 +16,7 @@ hedron_hivemind_base_pip_dependencies:
 
 hedron_hivemind_base_notbit_library:
   file.managed:
-    - name: {{ grains['hedron_python_dist_path'] }}/notbit.py
+    - name: {{ grains['hedron.python.dist.path'] }}/notbit.py
     - source: salt://hedron/hivemind/files/notbit.py
     - mode: 0644
 

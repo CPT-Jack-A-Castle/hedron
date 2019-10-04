@@ -2,6 +2,8 @@
 include:
   - hedron.pip
 
+# This won't work on anything other than Debian Stretch, most likely. Or whatever still uses Python 3.5.
+
 # FIXME: Should we be linking to python3 which is also a symlink or just to 3.5?
 hedron_python3default_symlink:
   file.managed:

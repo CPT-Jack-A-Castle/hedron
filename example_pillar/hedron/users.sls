@@ -22,3 +22,6 @@ hedron.users:
     ssh_private: |
       -----BEGIN RSA PRIVATE KEY-----
       -----END RSA PRIVATE KEY-----
+
+# Lock out root account from local login.
+hedron.users.root_password: '!'

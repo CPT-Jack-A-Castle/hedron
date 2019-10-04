@@ -67,7 +67,7 @@ hedron_vmmanagement_vmmanagement_shell:
 
 hedron_vmmanagement_vmmanagement_create_library:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/vmmanagement_create.py
+    - name: {{ grains['hedron.python.dist.path'] }}/vmmanagement_create.py
     - source: salt://hedron/vmmanagement/files/vmmanagement_create.py
     - mode: 0644
 
@@ -98,7 +98,7 @@ hedron_vmmanagement_vmmangement_run_create_path_enable_service:
 
 hedron_vmmanagement_vmmanagement_topup_library:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/vmmanagement_topup.py
+    - name: {{ grains['hedron.python.dist.path'] }}/vmmanagement_topup.py
     - source: salt://hedron/vmmanagement/files/vmmanagement_topup.py
     - mode: 0755
 

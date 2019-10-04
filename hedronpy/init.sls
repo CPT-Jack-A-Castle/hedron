@@ -9,5 +9,5 @@ hedron_hedronpy_dependencies:
 
 hedron_hedronpy_installed:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/hedron.py
+    - name: {{ grains['hedron.python.dist.path'] }}/hedron.py
     - source: salt://hedron/hedronpy/files/hedron.py

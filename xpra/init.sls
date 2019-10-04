@@ -15,7 +15,7 @@ hedron_xpra_apt_deps:
 
 hedron_xpra_repository:
   pkgrepo.managed:
-    - name: deb https://xpra.org/ stretch main
+    - name: deb https://xpra.org/ {{ grains['oscodename'] }} main
     - key_url: salt://hedron/xpra/files/xpra.asc
 
 hedron_xpra_package:

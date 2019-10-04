@@ -9,7 +9,7 @@ include:
 
 hedron_pgpwordify:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/pgpwordify.py
+    - name: {{ grains['hedron.python.dist.path'] }}/pgpwordify.py
     - source: salt://hedron/brainvault/files/pgpwordify.py
 
 #hedron_brainvault_package_dependencies:
@@ -34,7 +34,7 @@ hedron_brainvault_brainkey_executable:
 
 hedron_brainvault_brainkey_library:
   file.managed:
-    - name: /usr/local/lib/python3.5/dist-packages/brainkey.py
+    - name: {{ grains['hedron.python.dist.path'] }}/brainkey.py
     - source: salt://hedron/brainvault/files/brainkey.py
 
 # Where the brainvault-persistence backups get stored.
