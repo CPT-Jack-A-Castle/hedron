@@ -15,5 +15,5 @@ if [ -f /etc/X11/desired_resolution ]; then
     fi
 fi
 
-su - user -c dwm
+su - user -c "DISPLAY=$DISPLAY dwm"
 # su - user -c 'openbox --sm-disable'

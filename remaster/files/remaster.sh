@@ -2,8 +2,8 @@
 
 # Startup script for image builder.
 
-ISO=debian-stretch.iso
-FIRMWARE=debian-stretch-firmware.tar.gz
+ISO=debian-buster.iso
+FIRMWARE=debian-buster-firmware.tar.gz
 
 set -e
 

@@ -1,3 +1,6 @@
+include:
+  - .legacy_iptables
+
 # FIXME: We should move to scripts that act for both iptables and ip6tables. Too much redunancy.
 # Also, instead of flush on stop should revert to default allow-all rules... probably?
 

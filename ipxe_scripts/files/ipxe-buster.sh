@@ -15,7 +15,8 @@ PUBKEYFILE=$1
 
 CONSOLE="console=ttyS0,115200n8"
 
-[ "$2" = "--vga" ] && CONSOLE=""
+# console = "" is fine on Debian Stretch, but on Buster the frame buffer seems broken, so we disable it explicitly.
+[ "$2" = "--vga" ] && CONSOLE="nomodeset"
 
 # TODO: Strip comment off SSH key?
 

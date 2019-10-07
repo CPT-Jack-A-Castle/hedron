@@ -1,9 +1,12 @@
 include:
   - hedron.pip.python3
 
+# Something under bitcoinacceptor needs to compile, meh.
 hedron_fiat_per_coin_apt_dependencies:
   pkg.installed:
-    - name: python3-dev
+    - pkgs:
+      - python3-dev
+      - build-essential
 
 hedron_fiat_per_coin_dependencies:
   pip.installed:

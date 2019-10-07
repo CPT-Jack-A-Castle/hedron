@@ -25,10 +25,17 @@ fi
 
 VM_DIR="/etc/sporestackv2_salt/$HOSTNAME"
 
+# This is a bit of a hack to improve privacy on vagabond workstation's identity VMs
+if echo "$HOSTNAME" | grep -q '_identity_vm$'; then
+    CHOSENHOSTNAME="debian"
+else
+    CHOSENHOSTNAME="$HOSTNAME"
+fi
+
 if [ ! -d "$VM_DIR" ]; then
     mkdir -p "$VM_DIR"
 # FIXME: Dunno about this formatting so leaving it ugly.
-echo "$HOSTNAME:
+echo "$CHOSENHOSTNAME:
   host: $SSHHOSTNAME
   port: $SSHPORT
   minion_opts:
@@ -46,7 +53,7 @@ failhard: True' > "$VM_DIR/master"
 fi
 
 salt_this_vm() {
-    salt-ssh --priv "$(keyplease private "$HOSTNAME")" --no-host-keys -c "/etc/sporestackv2_salt/$HOSTNAME" --log-file /dev/null "$HOSTNAME" "$@"
+    salt-ssh --priv "$(keyplease private "$HOSTNAME")" --no-host-keys -c "/etc/sporestackv2_salt/$HOSTNAME" --log-file /dev/null "$CHOSENHOSTNAME" "$@"
 }
 
 if [ -z "$1" ]; then

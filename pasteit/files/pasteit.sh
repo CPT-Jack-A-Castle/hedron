@@ -24,7 +24,9 @@ cleanup() {
     exit 1
 }
 
-trap cleanup $(seq 1 64)
+# trap something 1..64 like this always invokes the trap on Bash 5 but not Bash 4.4 (5 is in Buster, 4.4 is in Stretch)
+# Dunno if this is a bug but 1..15 makes more sense anyways if you man 7 signal.
+trap cleanup $(seq 1 15)
 
 # pasta.cf is currently down. Some quick references...
 # Preseed up to .onion and returning .onion url.
