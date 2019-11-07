@@ -13,9 +13,6 @@ hedron_statsd_failed_units_service_file:
         [Service]
         Type=oneshot
         ExecStart=/usr/local/bin/statsd-failed_units
-        DynamicUser=yes
-        ProtectSystem=strict
-        NoNewPrivileges=yes
         [Install]
         WantedBy=multi-user.target
     - check_cmd: systemd-analyze verify

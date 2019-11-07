@@ -37,7 +37,8 @@ generate() {
     public_key="$KEYPLEASE_DIR/$host.pub"
     [ -f "$public_key" ] && fail "keyplease already exists: $public_key"
     [ -f "$private_key" ] && fail "keyplease already exists: $private_key"
-    ssh-keygen -b 2048 -t rsa -C '' -N '' -f "$private_key" > /dev/null
+    # -m PEM is a workaround for Debian 10+ and this Paramiko issue: https://github.com/paramiko/paramiko/pull/1343
+    ssh-keygen -m PEM -b 2048 -t rsa -C '' -N '' -f "$private_key" > /dev/null
 }
 
 getkey() {

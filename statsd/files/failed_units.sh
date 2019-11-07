@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 usage() {
     echo "$0"
     exit 2
