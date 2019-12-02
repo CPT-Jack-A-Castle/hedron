@@ -1,8 +1,8 @@
 hedron_rqlite_package_download:
   file.managed:
     - name: /srv/salt/dist/rqlite.tar.gz
-    - source: https://github.com/rqlite/rqlite/releases/download/v4.5.0/rqlite-v4.5.0-linux-amd64.tar.gz
-    - source_hash: 8f98a2720f15b23474dcd1128a7032a3c4dd76a070cf74f75d45ba17800d9df6
+    - source: https://github.com/rqlite/rqlite/releases/download/v4.6.0/rqlite-v4.6.0-linux-amd64.tar.gz
+    - source_hash: ed84c7957bbe571ee0898942b698661eb1c5b8e308b98b4d034ad07fc667b111
     - makedirs: True
 
 hedron_rqlite_package_extract:

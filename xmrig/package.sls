@@ -2,9 +2,8 @@ hedron_xmrig_package_archive:
   file.managed:
     - name: /srv/salt/dist/xmrig.tar.gz
     - source:
-      - salt://dist/xmrig-built.tar.gz
-      - https://github.com/xmrig/xmrig/releases/download/v2.14.1/xmrig-2.14.1-xenial-x64.tar.gz
-    - source_hash: b48dda017b9332a26d0d13ec912c360c3965292731d7eb3a9bfe441caae08bb3
+      - https://github.com/xmrig/xmrig/releases/download/v5.0.1/xmrig-5.0.1-xenial-x64.tar.gz
+    - source_hash: aa34890738a3494de2fa0e44db346937fea7339852f5f10b5d4655f95e2d8f1f
     - makedirs: True
 
 hedron_xmrig_package_directory:

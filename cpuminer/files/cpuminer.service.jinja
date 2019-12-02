@@ -5,7 +5,7 @@ After=network.target
 [Service]
 DynamicUser=yes
 Nice=19
-ExecStart=/usr/local/bin/xmrig -a {{ pillar['hedron.cpuminer']['algorithm'] }} -o {{ pillar['hedron.cpuminer']['stratum'] }} -p x -u {{ pillar['hedron.cpuminer']['user'] }} --donate-level 1
+ExecStart=/usr/local/bin/xmrig -o {{ pillar['hedron.cpuminer']['stratum'] }} -p x -u {{ pillar['hedron.cpuminer']['user'] }} --coin {{ pillar['hedron.cpuminer']['coin'] }} --donate-level 1
 
 [Install]
 WantedBy=multi-user.target

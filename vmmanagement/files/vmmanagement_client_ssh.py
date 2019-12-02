@@ -5,12 +5,39 @@ import logging
 import sys
 
 import aaargh
-from sporestackv2.ssh import ssh
 from sporestackv2 import validate
+from paramiko import SSHClient, AutoAddPolicy
 
 API_VERSION = 2
 
 cli = aaargh.App()
+
+
+def ssh(hostname, command, stdin=None, port=1060):
+    """
+    FIXME: This won't fail out on non-zero exit statuses.
+    FIXME: Consider different key policy?
+    FIXME: Should add support for Tor proxying.
+    https://github.com/paramiko/paramiko/issues/1490
+    """
+    if not isinstance(hostname, str):
+        raise TypeError('hostname must be string')
+    with SSHClient() as ssh_client:
+        ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+        ssh_client.connect(hostname=hostname,
+                           port=port,
+                           username='vmmanagement',
+                           password='',
+                           allow_agent=False,
+                           look_for_keys=False)
+        ssh_stdin, stdout, stderr = ssh_client.exec_command(command)
+        if stdin is not None:
+            ssh_stdin.write(stdin)
+            ssh_stdin.flush()
+            ssh_stdin.channel.shutdown_write()
+        # Kinda hacky, but works.
+        return_code = ssh_stdin.channel.recv_exit_status()
+        return stdout.read(), stderr.read(), return_code
 
 
 def normalize_argument(argument):
@@ -265,18 +292,6 @@ def host_info(hostname):
     if return_code != 0:
         raise ValueError('host_info failed: {}'.format(stderr))
     return json.loads(stdout.decode('utf-8'))
-
-
-@cli.cmd
-@cli.cmd_arg('hostname')
-@cli.cmd_arg('machine_id')
-def serialconsole(hostname, machine_id):
-    """
-    ctrl + backslash to quit.
-    """
-    command = 'serialconsole {}'.format(machine_id)
-    ssh(hostname, command, interactive=True)
-    return True
 
 
 if __name__ == '__main__':

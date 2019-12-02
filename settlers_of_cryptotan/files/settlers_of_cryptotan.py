@@ -8,6 +8,7 @@ Same with business tokens.
 """
 
 import logging
+import traceback
 from hashlib import sha256
 
 import requests
@@ -249,5 +250,7 @@ def hug_handle_exception(exception, response):
 def hug_handle_other_exceptions(exception, response):
     # 500s for these, since likely our failure and client should retry.
     response.status = HTTP_500
-    logging.critical('Unhandled except in Settlers of Cryptotan')
-    return str(exception)
+    logging.critical('Unhandled exception in Settlers of Cryptotan')
+    logging.warning(exception)
+    traceback.print_exc()
+    return "Something broke, please contact us."

@@ -4,7 +4,7 @@ Description=Monero Node (Testnet)
 [Service]
 User=monero-testnet
 Nice=18
-ExecStart=/usr/local/monero/monerod --testnet --non-interactive --no-igd --hide-my-port --proxy tor,127.0.0.1:9050,100
+ExecStart=/usr/local/monero/monerod --testnet --non-interactive --no-igd --hide-my-port --tx-proxy tor,127.0.0.1:9050,100
 ProtectSystem=full
 NoNewPrivileges=true
 

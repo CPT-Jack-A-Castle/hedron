@@ -1,15 +1,13 @@
-# git is not technically a requirement, but go get github.com/.... is very common and we need it for that.
-hedron_golang_dependencies:
-  pkg.installed:
-    - name: git
+{% set version = '1.13.4' %}
+{% set hash = '692d17071736f74be04a72a06dab9cac1cd759377bd85316e52b2227604c004c' %}
 
 hedron_golang_archive:
   file.managed:
-    - name: /srv/salt/dist/golang.tar.gz
+    - name: /srv/salt/dist/{{ hash }}-golang.tar.gz
     - source:
-      - salt://dist/golang.tar.gz
-      - https://dl.google.com/go/go1.12.10.linux-amd64.tar.gz
-    - source_hash: aaa84147433aed24e70b31da369bb6ca2859464a45de47c2a5023d8573412f6b
+      - salt://dist/{{ hash }}-golang.tar.gz
+      - https://dl.google.com/go/go{{ version }}.linux-amd64.tar.gz
+    - source_hash: {{ hash }}
     - makedirs: True
 
 hedron_golang_directory:
@@ -20,7 +18,7 @@ hedron_golang_directory:
 # Archive is normally just "go/" but don't want to "trust" that, just in case.
 hedron_golang_extracted:
   cmd.run:
-    - name: tar --strip-components=1 --owner 0 --group 0 -xzf /srv/salt/dist/golang.tar.gz -C /usr/local/go
+    - name: tar --strip-components=1 --owner 0 --group 0 -xzf /srv/salt/dist/{{ hash }}-golang.tar.gz -C /usr/local/go
     - creates: /usr/local/go/bin/go
 
 hedron_golang_symlink:

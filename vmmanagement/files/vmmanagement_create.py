@@ -386,9 +386,6 @@ def cost_in_cents(days,
     total_cents = int(per_day * days)
     if total_cents < config['minimum_cents_per_day'] * days:
         total_cents = config['minimum_cents_per_day'] * days
-    # 10% discount for using settlement layer.
-    if currency == 'settlement':
-        total_cents = int(total_cents * 0.9)
     return total_cents
 
 
