@@ -1,0 +1,13 @@
+[Unit]
+Description=settlersd IPXE script service
+[Service]
+DynamicUser=yes
+StateDirectory=settlersd
+WorkingDirectory=/var/lib/settlersd
+ExecStart=/usr/local/bin/settlersd /var/lib/settlersd/settlersd.json
+ProtectSystem=strict
+NoNewPrivileges=yes
+UMask=0077
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

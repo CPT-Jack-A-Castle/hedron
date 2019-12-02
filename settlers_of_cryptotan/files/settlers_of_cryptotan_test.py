@@ -1,7 +1,4 @@
 import pytest
-import pyrqlite.dbapi2 as dbapi2
-from mock import patch
-from sqlite3 import Error as sqlite3_Error
 
 import settlers_of_cryptotan as settlers
 
@@ -49,64 +46,3 @@ def test_validate_amount():
 
 def test_combine_token():
     assert settlers.combine_token(customer_token, business_token) == combined
-
-
-@patch('settlers_of_cryptotan._rqlite_connection')
-def test_everything(mock_rqlite_connection):
-    """
-    Test everything in a sequence to validate that it's working.
-    """
-    database_connection = dbapi2.connect(host=':memory:')
-    mock_rqlite_connection.return_value = database_connection
-
-    # Not prepared yet.
-    with pytest.raises(sqlite3_Error):
-        settlers.balance(combined_token=combined)
-
-    settlers.prep()
-    # Not enabled yet.
-    with pytest.raises(ValueError):
-
-        settlers.balance(combined_token=combined)
-    # Subtract not enabled.
-    with pytest.raises(ValueError):
-        settlers.subtract(1000, combined_token=combined)
-
-    # Add not enabled.
-    with pytest.raises(ValueError):
-        settlers.add(1000, combined_token=combined)
-
-    settlers.enable(combined_token=combined)
-    assert settlers.balance(combined_token=combined) == 0
-    settlers.add(5, combined_token=combined)
-    assert settlers.balance(combined_token=combined) == 5
-    settlers.subtract(5, combined_token=combined)
-    assert settlers.balance(combined_token=combined) == 0
-    settlers.add(1000, combined_token=combined)
-    settlers.subtract(1, combined_token=combined)
-    assert settlers.balance(combined_token=combined) == 999
-    assert settlers.balance(customer_token=customer_token,
-                            business_token=business_token) == 999
-
-    # Balance would go negative.
-    with pytest.raises(ValueError):
-        settlers.subtract(1000, combined_token=combined)
-
-    # Token never filled with money.
-    with pytest.raises(ValueError):
-        settlers.balance(combined_token=token)
-
-
-@patch('settlers_of_cryptotan._rqlite_connection')
-def test_dead_db(mock_rqlite_connection):
-    # Should immediately throw connection refused.
-    database_connection = dbapi2.connect(host='127.0.0.1', port=1000)
-    mock_rqlite_connection.return_value = database_connection
-    with pytest.raises(ConnectionRefusedError):
-        settlers.balance(combined_token=combined)
-
-    with pytest.raises(ConnectionRefusedError):
-        settlers.subtract(amount=5, combined_token=combined)
-
-    with pytest.raises(ConnectionRefusedError):
-        settlers.add(amount=5, combined_token=combined)

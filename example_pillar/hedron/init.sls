@@ -11,6 +11,7 @@ include:
   - hedron.walkingliberty
   - hedron.organization
   - hedron.cpuminer
+  - hedron.settlersd
   - hedron.sporestack
   - hedron.sslexpirystatsd
   - hedron.tor
