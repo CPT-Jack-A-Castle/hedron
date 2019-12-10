@@ -19,6 +19,7 @@ hedron_salt_checkout_sync_{{ dir }}:
     - clean: True
     - file_mode: '0755'
     - show_changes: False
+    - exclude_pat: '*/.git/*'
 {% endfor %}
 
 hedron_salt_checkout_sync_top_sls:

@@ -31,6 +31,9 @@ CONFIG_FILE = '/etc/vmmanagement.json'
 
 CREATION_DIRECTORY = '/var/tmp/vmmanagement_creation'
 
+# 10% to affiliates
+AFFILIATE_RATE = 0.1
+
 # This is more trouble than it's worth, especially for alternative drivers.
 # Eventually want to do type checking on known keys, perhaps.
 # VALID_CONFIG_OPTIONS = ('currencies',
@@ -110,6 +113,12 @@ def get_config():
 
 def get_and_validate_config():
     config = get_config()
+    if 'settlers_business_token' not in config:
+        if 'settlement' in config['currencies']:
+            token = config['currencies']['settlement']
+            config['settlers_business_token'] = token
+        else:
+            config['settlers_business_token'] = None
     validate_config(config)
     return config
 
@@ -397,11 +406,21 @@ def payment(machine_id,
             existing_txids=[],
             settlers_endpoint=None,
             settlers_customer_token=None,
-            monero_rpc=None):
+            settlers_business_token=None,
+            monero_rpc=None,
+            affiliate_token=None,
+            affiliate_amount=None):
     """
     Return txid (None or string), amount (in Satoshis or cents, depending).
     """
     output = namedtuple('pay', ['txid', 'amount', 'uri'])
+
+    # Make sure affiliate token is valid if we have one.
+    if affiliate_token is not None:
+        settlers.balance(business_token=settlers_business_token,
+                         customer_token=affiliate_token,
+                         endpoint=settlers_endpoint)
+
     if currency == 'settlement':
         settlers_business_token = address
 
@@ -433,6 +452,27 @@ def payment(machine_id,
         if btcacceptor.txid is False:
             output.txid = None
         else:
+            # If payment was successful...
+            if affiliate_token is not None:
+                if affiliate_amount is None:
+                    affiliate_amount = int(cents * AFFILIATE_RATE)
+                try:
+                    settlers.add(amount=affiliate_amount,
+                                 business_token=settlers_business_token,
+                                 customer_token=affiliate_token,
+                                 endpoint=settlers_endpoint)
+                except Exception as e:
+                    logging.critical("Exception paying affiliate.")
+                    logging.critical(e)
+                    msg = "vmmanagement_create.py payment(): "
+                    msg += "Unable to pay affiliate, please try again."
+                    # If affiliate fails we want to give a 500 so the client
+                    # retries.
+                    raise Exception(msg)
+                statsd.gauge('payment.affiliate.cents',
+                             affiliate_amount,
+                             delta=True)
+
             statsd.gauge('payment.cents.{}'.format(currency),
                          cents,
                          delta=True)
@@ -458,7 +498,9 @@ def virtual_machine_create(machine_id,
                            hostaccess=False,
                            kvmpassthrough=False,
                            wholehost=False,
-                           settlement_token=None):
+                           settlement_token=None,
+                           affiliate_token=None,
+                           affiliate_amount=None):
     config = get_and_validate_config()
     if not override(override_code):
         if config['draining'] is True:
@@ -490,6 +532,7 @@ def virtual_machine_create(machine_id,
     validate.ipv6(ipv6)
     validate.bandwidth(bandwidth)
     validate.organization(organization)
+    validate.affiliate_amount(affiliate_amount)
     # settlement_token is validated in settlers.
     if virtual_machine_exists(machine_id):
         raise ValueError('machine_id is already in use.')
@@ -575,6 +618,7 @@ def virtual_machine_create(machine_id,
                               override=override(override_code))
         logging.info('Cost in cents: {}'.format(cents))
         token = settlement_token
+        business_token = config['settlers_business_token']
         pay = payment(machine_id,
                       currency,
                       cents,
@@ -582,7 +626,10 @@ def virtual_machine_create(machine_id,
                       existing_txids=existing_txids(currency),
                       settlers_endpoint=config['settlers_endpoint'],
                       settlers_customer_token=token,
-                      monero_rpc=config['monero_rpc'])
+                      settlers_business_token=business_token,
+                      monero_rpc=config['monero_rpc'],
+                      affiliate_token=affiliate_token,
+                      affiliate_amount=affiliate_amount)
         return_data['txid'] = pay.txid
         return_data['payment']['amount'] = pay.amount
         return_data['payment']['uri'] = pay.uri

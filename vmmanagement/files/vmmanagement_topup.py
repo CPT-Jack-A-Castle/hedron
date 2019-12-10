@@ -80,7 +80,9 @@ def virtual_machine_topup(machine_id,
                           currency,
                           refund_address=None,
                           override_code=None,
-                          settlement_token=None):
+                          settlement_token=None,
+                          affiliate_token=None,
+                          affiliate_amount=None):
     config = get_and_validate_config()
     # We should have a draining for topups separately.
     # if config['draining'] is True:
@@ -99,6 +101,7 @@ def virtual_machine_topup(machine_id,
     validate.machine_id(machine_id)
     validate.refund_address(refund_address)
     validate.currency(currency)
+    validate.affiliate_amount(affiliate_amount)
     # settlement_token is validated in settlers.
 
     logging.info('topup request for {}'.format(machine_id))
@@ -127,6 +130,7 @@ def virtual_machine_topup(machine_id,
                               currency=currency)
         logging.info('Cost in cents: {}'.format(cents))
         token = settlement_token
+        business_token = config['settlers_business_token']
         pay = payment(machine_id,
                       currency,
                       cents,
@@ -134,7 +138,10 @@ def virtual_machine_topup(machine_id,
                       existing_txids=existing_txids(currency),
                       settlers_endpoint=config['settlers_endpoint'],
                       settlers_customer_token=token,
-                      monero_rpc=config['monero_rpc'])
+                      settlers_business_token=business_token,
+                      monero_rpc=config['monero_rpc'],
+                      affiliate_amount=affiliate_amount,
+                      affiliate_token=affiliate_token)
         return_data['txid'] = pay.txid
         return_data['payment']['amount'] = pay.amount
         return_data['payment']['uri'] = pay.uri

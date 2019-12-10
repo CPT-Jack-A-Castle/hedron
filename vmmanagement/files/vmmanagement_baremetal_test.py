@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 from mock import patch
 
@@ -26,7 +28,7 @@ def test_host_info(mock_available_resources,
     expected = {'cores': 4,
                 'memory': 4,
                 'disk': 20,
-                'currencies': ['bch'],
+                'currencies': ['bch', 'btc'],
                 'ipv4': ['/32'],
                 'ipv4_addresses': 0,
                 'ipv6': ['/128'],
@@ -39,6 +41,7 @@ def test_host_info(mock_available_resources,
                 'operating_systems': operating_systems,
                 'features': ['ipxe', 'operating_system']}
     info = vmmanagement_baremetal.host_info()
+    logging.debug(info)
     assert info == expected
 
 

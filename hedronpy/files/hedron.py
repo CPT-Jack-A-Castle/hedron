@@ -26,6 +26,9 @@ def validate_bootorder(bootorder):
 
 
 def virtual_machine_info(machine_id):
+    vm_dir = os.path.join(VM_DIR, machine_id)
+    if os.path.exists(vm_dir) is not True:
+        raise ValueError('VM does not exist on this host.')
     settings_file = os.path.join(VM_DIR, machine_id, 'settings.json')
     with open(settings_file) as virtual_machine_json_file:
         virtual_machine_dict = json.load(virtual_machine_json_file)

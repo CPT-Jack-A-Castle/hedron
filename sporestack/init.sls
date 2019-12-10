@@ -1,7 +1,7 @@
 include:
   - hedron.pip.python3
 
-{% set version = '1.1.2' %}
+{% set version = '1.1.3' %}
 
 hedron_sporestack_pip_installed:
   pip.installed:

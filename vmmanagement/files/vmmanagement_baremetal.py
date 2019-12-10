@@ -106,7 +106,9 @@ def launch(machine_id,
            hostaccess=False,
            refund_address=None,
            qemuopts=None,
-           managed=False):
+           managed=False,
+           affiliate_amount=None,
+           affiliate_token=None):
     """
     ssh_key and operating_system have no effect.
     """
@@ -123,6 +125,7 @@ def launch(machine_id,
 
     validate.ipxescript(ipxescript)
     validate.region(region)
+    validate.affiliate_amount(affiliate_amount)
 
     validate.ssh_key(ssh_key)
     validate.operating_system(operating_system)
@@ -161,7 +164,9 @@ def launch(machine_id,
                       qemuopts=qemuopts,
                       managed=managed,
                       organization=organization,
-                      hostaccess=hostaccess)
+                      hostaccess=hostaccess,
+                      affiliate_amount=affiliate_amount,
+                      affiliate_token=affiliate_token)
 
     created_dict = create_vm()
     created_dict['cores'] = cores
@@ -194,7 +199,9 @@ def topup(machine_id,
           host=None,
           settlement_token=None,
           refund_address=None,
-          override_code=None):
+          override_code=None,
+          affiliate_amount=None,
+          affiliate_token=None):
     """
     tops up an existing vm.
     """
@@ -202,13 +209,16 @@ def topup(machine_id,
     validate.days(days)
     validate.currency(currency)
     validate.refund_address(refund_address)
+    validate.affiliate_amount(affiliate_amount)
 
     topup_dict = virtual_machine_topup(machine_id=machine_id,
                                        days=days,
                                        currency=currency,
                                        refund_address=refund_address,
                                        settlement_token=settlement_token,
-                                       override_code=override_code)
+                                       override_code=override_code,
+                                       affiliate_amount=affiliate_amount,
+                                       affiliate_token=affiliate_token)
     topup_dict['machine_id'] = machine_id
     return topup_dict
 
@@ -310,4 +320,4 @@ def hug_handle_other_exceptions(exception, response):
     logging.critical('Unhandled exception in vmmanagement_baremetal!')
     logging.warning(exception)
     traceback.print_exc()
-    return "Something broke, please contact us."
+    return "Something broke in vmmanagement_baremetal, please contact us."
