@@ -1,8 +1,9 @@
 # Built from https://github.com/sporestack/settlers
 
-# Old hash: b157f4401ed4c961e7184d26d7feca22fc74e067deba0a19fae17be2076a41c7 (as of 2019-12-11)
+# Old hash: b157f4401ed4c961e7184d26d7feca22fc74e067deba0a19fae17be2076a41c7 (as of 2019-12-10)
+# Less old hash: 9a2045889ba7d11b6673ca720e6849475a4e48113d6841a85ae3c80b2449a2e1 (as of 2019-12-11)
 
-{% set hash = '9a2045889ba7d11b6673ca720e6849475a4e48113d6841a85ae3c80b2449a2e1' %}
+{% set hash = '03e0a86b1880116c5717d3dfca50aa978ec6388ebb8cae790c87b1b21ff449b0' %}
 
 hedron_settlersd_installed:
   file.managed:

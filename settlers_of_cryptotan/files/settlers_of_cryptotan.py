@@ -73,7 +73,8 @@ def enable(admin_token,
     Enable a token
     """
     combined_token = combine_token(customer_token, business_token)
-    combined_deposit_token = deposit_token(customer_token)
+    combined_deposit_token = combine_token(deposit_token(customer_token),
+                                           business_token)
     url = '{}/enable'.format(endpoint)
     request_dict = {'admin_token': admin_token,
                     'combined_token': combined_token,
