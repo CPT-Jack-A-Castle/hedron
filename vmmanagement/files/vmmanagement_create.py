@@ -374,7 +374,6 @@ def cost_in_cents(days,
                   ipv4,
                   ipv6,
                   bandwidth,
-                  currency=None,
                   override=False):
     """
     Returns the cost of a server in cents.
@@ -413,17 +412,23 @@ def payment(machine_id,
     """
     Return txid (None or string), amount (in Satoshis or cents, depending).
     """
-    output = namedtuple('pay', ['txid', 'amount', 'uri'])
+    output = namedtuple('pay', ['txid', 'amount', 'uri', 'usd', 'address'])
+
+    original_cents = cents
+    if affiliate_amount is not None:
+        cents += affiliate_amount
+
+    output.usd = utilities.cents_to_usd(cents)
 
     # Make sure affiliate token is valid if we have one.
     if affiliate_token is not None:
-        settlers.balance(business_token=settlers_business_token,
-                         customer_token=affiliate_token,
-                         endpoint=settlers_endpoint)
+        token_enabled = settlers.deposit_only_token_enabled
+        token_enabled(business_token=settlers_business_token,
+                      deposit_token=affiliate_token,
+                      endpoint=settlers_endpoint)
 
     if currency == 'settlement':
-        settlers_business_token = address
-
+        output.address = None
         # If this fails, it throws an exception and we bail out.
         settlers.subtract(amount=cents,
                           business_token=settlers_business_token,
@@ -434,6 +439,7 @@ def payment(machine_id,
         output.amount = cents
         output.uri = None
     else:
+        output.address = address
         first, second = fiat_per_coin.get(currency)
         # machine_id gets hashed as the unique so it should be safe.
         btcacceptor = bitcoinacceptor.fiat_payment(address=address,
@@ -447,8 +453,9 @@ def payment(machine_id,
         output.txid = btcacceptor.txid
         output.amount = btcacceptor.satoshis
         output.uri = btcacceptor.uri
-        msg = 'payment() attempt: URI: {} Cents: {}'
-        logging.info(msg.format(output.uri, cents))
+        msg = 'payment() attempt: URI: {} Cents: {} Affiiate: {} USD: {}'
+        formatted = msg.format(output.uri, cents, affiliate_amount, output.usd)
+        logging.info(formatted)
         if btcacceptor.txid is False:
             output.txid = None
         else:
@@ -457,10 +464,10 @@ def payment(machine_id,
                 if affiliate_amount is None:
                     affiliate_amount = int(cents * AFFILIATE_RATE)
                 try:
-                    settlers.add(amount=affiliate_amount,
-                                 business_token=settlers_business_token,
-                                 customer_token=affiliate_token,
-                                 endpoint=settlers_endpoint)
+                    settlers.deposit(amount=affiliate_amount,
+                                     business_token=settlers_business_token,
+                                     deposit_token=affiliate_token,
+                                     endpoint=settlers_endpoint)
                 except Exception as e:
                     logging.critical("Exception paying affiliate.")
                     logging.critical(e)
@@ -473,7 +480,11 @@ def payment(machine_id,
                              affiliate_amount,
                              delta=True)
 
+            # Log cents and affiliate cents independently.
             statsd.gauge('payment.cents.{}'.format(currency),
+                         original_cents,
+                         delta=True)
+            statsd.gauge('payment.all_cents.{}'.format(currency),
                          cents,
                          delta=True)
 
@@ -605,8 +616,6 @@ def virtual_machine_create(machine_id,
 
     if return_data['paid'] is False:
         address = config['currencies'][currency]
-        if currency != 'settlement':
-            return_data['payment']['address'] = address
         cents = cost_in_cents(days=days,
                               cores=cores,
                               memory=memory,
@@ -614,9 +623,7 @@ def virtual_machine_create(machine_id,
                               ipv4=ipv4,
                               ipv6=ipv6,
                               bandwidth=bandwidth,
-                              currency=currency,
                               override=override(override_code))
-        logging.info('Cost in cents: {}'.format(cents))
         token = settlement_token
         business_token = config['settlers_business_token']
         pay = payment(machine_id,
@@ -633,7 +640,8 @@ def virtual_machine_create(machine_id,
         return_data['txid'] = pay.txid
         return_data['payment']['amount'] = pay.amount
         return_data['payment']['uri'] = pay.uri
-        return_data['payment']['usd'] = utilities.cents_to_usd(cents)
+        return_data['payment']['usd'] = pay.usd
+        return_data['payment']['address'] = pay.address
 
         if return_data['txid'] is not None:
             return_data['paid'] = True

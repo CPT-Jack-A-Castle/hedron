@@ -1,5 +1,5 @@
 [Unit]
-Description=settlersd IPXE script service
+Description=settlersd service
 [Service]
 DynamicUser=yes
 StateDirectory=settlersd

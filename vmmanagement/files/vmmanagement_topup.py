@@ -8,7 +8,7 @@ import logging
 import time
 
 from systemd.journal import JournalHandler
-from sporestackv2 import validate, utilities
+from sporestackv2 import validate
 
 import hedron
 from vmmanagement_create import (get_and_validate_config,
@@ -118,17 +118,13 @@ def virtual_machine_topup(machine_id,
 
     if return_data['paid'] is False:
         address = config['currencies'][currency]
-        if currency != 'settlement':
-            return_data['payment']['address'] = address
         cents = cost_in_cents(days=days,
                               cores=vm_data['cores'],
                               memory=vm_data['memory'],
                               disk=vm_data['disk'],
                               ipv4=vm_data['ipv4'],
                               ipv6=vm_data['ipv6'],
-                              bandwidth=vm_data['bandwidth'],
-                              currency=currency)
-        logging.info('Cost in cents: {}'.format(cents))
+                              bandwidth=vm_data['bandwidth'])
         token = settlement_token
         business_token = config['settlers_business_token']
         pay = payment(machine_id,
@@ -145,7 +141,8 @@ def virtual_machine_topup(machine_id,
         return_data['txid'] = pay.txid
         return_data['payment']['amount'] = pay.amount
         return_data['payment']['uri'] = pay.uri
-        return_data['payment']['usd'] = utilities.cents_to_usd(cents)
+        return_data['payment']['usd'] = pay.usd
+        return_data['payment']['address'] = pay.address
 
         if return_data['txid'] is not None:
             return_data['paid'] = True

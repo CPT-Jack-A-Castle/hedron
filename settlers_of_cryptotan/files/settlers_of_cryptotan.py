@@ -55,6 +55,16 @@ def combine_token(customer_token, business_token):
     return combined_token
 
 
+def deposit_token(customer_token):
+    """
+    Derives the deposit token from the customer token.
+    """
+    validate_token(customer_token)
+    to_hash = '{} deposit'.format(customer_token).encode('utf-8')
+    token = sha256(to_hash).hexdigest()
+    return token
+
+
 def enable(admin_token,
            customer_token,
            business_token,
@@ -63,9 +73,11 @@ def enable(admin_token,
     Enable a token
     """
     combined_token = combine_token(customer_token, business_token)
+    combined_deposit_token = deposit_token(customer_token)
     url = '{}/enable'.format(endpoint)
     request_dict = {'admin_token': admin_token,
-                    'combined_token': combined_token}
+                    'combined_token': combined_token,
+                    'combined_deposit_only_token': combined_deposit_token}
     request = requests.post(url, json=request_dict)
     try:
         request.raise_for_status()
@@ -124,6 +136,42 @@ def subtract(amount,
     url = '{}/subtract'.format(endpoint)
     request_dict = {'amount': amount, 'combined_token': combined_token}
     request = requests.post(url, json=request_dict)
+    try:
+        request.raise_for_status()
+    except Exception:
+        raise ValueError(request.content)
+    return True
+
+
+def deposit(amount,
+            deposit_token,
+            business_token,
+            endpoint):
+    """
+    Deposits to regular token's balance via the deposit only token.
+    """
+    validate_amount(amount)
+    combined_token = combine_token(deposit_token, business_token)
+    url = '{}/deposit'.format(endpoint)
+    request_dict = {'amount': amount,
+                    'combined_deposit_only_token': combined_token}
+    request = requests.post(url, json=request_dict)
+    try:
+        request.raise_for_status()
+    except Exception:
+        raise ValueError(request.content)
+    return True
+
+
+def deposit_only_token_enabled(deposit_token,
+                               business_token,
+                               endpoint=None):
+    """
+    Returns True if enabled.
+    """
+    combined_token = combine_token(deposit_token, business_token)
+    url = '{}/depositOnlyTokenEnabled/{}'.format(endpoint, combined_token)
+    request = requests.get(url)
     try:
         request.raise_for_status()
     except Exception:

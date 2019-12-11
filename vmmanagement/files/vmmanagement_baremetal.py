@@ -50,7 +50,7 @@ def host_info():
         our_list = []
         for item in dictionary:
             our_list.append(item)
-        return our_list
+        return sorted(our_list)
 
     currencies = _dict_to_list(config['currencies'])
     ipv4 = _dict_to_list(config['ipv4'])

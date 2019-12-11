@@ -308,6 +308,7 @@ def test_virtual_machine_create_payment(mock_get_config,
                                          managed=False,
                                          hostaccess=False)
     assert return_data['paid'] is False
+    print(return_data['payment']['address'])
     assert return_data['payment']['address'] == btc_address
     assert return_data['bandwidth'] == 0
 

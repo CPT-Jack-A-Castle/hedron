@@ -4,6 +4,9 @@ import settlers_of_cryptotan as settlers
 
 # "satoshi"
 token = 'da2876b3eb31edb4436fa4650673fc6f01f90de2f1793c4ec332b2387b09726f'
+dtoken = "ab8e0a76292328c63b2de3cb8a17c417cf81c31c9dc711b3756c5ef712ca9ea2"
+deposit_token = dtoken
+
 # "nakamoto"
 token2 = '8eef2960bec338415417c52eec417ecbf6b218bf0dba3afb7862391c1db1e29a'
 
@@ -46,3 +49,7 @@ def test_validate_amount():
 
 def test_combine_token():
     assert settlers.combine_token(customer_token, business_token) == combined
+
+
+def test_deposit_token():
+    assert settlers.deposit_token(token) == deposit_token
