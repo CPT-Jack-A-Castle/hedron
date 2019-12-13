@@ -22,16 +22,16 @@ hedron_remaster_debian_buster_iso:
   file.managed:
     - name: /srv/salt/dist/debian-buster.iso
     - source:
-      - https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.1.0-amd64-xfce-CD-1.iso
-    - source_hash: 2d6da2d422cbc27a396d53b94b9bf2d7637e926d6392d4e90d4e18012575562d
+      - https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.2.0-amd64-xfce-CD-1.iso
+    - source_hash: 745172d8ba09f054335cc738409aede5c5f3463ae39df0a008eb41ceeba44b5c
     - makedirs: True
 
 hedron_remaster_debian_buster_firmware:
   file.managed:
     - name: /srv/salt/dist/debian-buster-firmware.tar.gz
     - source:
-      - https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/buster/20190908/firmware.tar.gz
-    - source_hash: 89505e4e9f20acc07146390d0b9e086607d940786191dd6222093271acd23934
+      - https://cdimage.debian.org/cdimage/unofficial/non-free/firmware/buster/20191116/firmware.tar.gz
+    - source_hash: 5629ddf114bee59a644743b469b49042462af0e5ac826685b9faf33e253d7c9c
     - makedirs: True
 
 #hedron_remaster_debian_buster_iso:
