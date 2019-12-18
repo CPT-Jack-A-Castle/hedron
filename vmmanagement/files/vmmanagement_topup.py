@@ -118,13 +118,20 @@ def virtual_machine_topup(machine_id,
 
     if return_data['paid'] is False:
         address = config['currencies'][currency]
+        # There is a bug with this, it uses the whole amount of bandwidth
+        # over whatever timespan as the per-day calculation. So a 28 day server
+        # at 32GiB per day will try to "pop up" at 28*32GiB per day and not
+        # 32GiB per day.
+        # bandwidth = vm_data['bandwidth']
+        # Hack for now.
+        bandwidth = 0
         cents = cost_in_cents(days=days,
                               cores=vm_data['cores'],
                               memory=vm_data['memory'],
                               disk=vm_data['disk'],
                               ipv4=vm_data['ipv4'],
                               ipv6=vm_data['ipv6'],
-                              bandwidth=vm_data['bandwidth'])
+                              bandwidth=bandwidth)
         token = settlement_token
         business_token = config['settlers_business_token']
         pay = payment(machine_id,
