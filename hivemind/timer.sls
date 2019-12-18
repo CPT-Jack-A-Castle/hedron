@@ -38,7 +38,7 @@ hedron_hivemind_alert_timer_service_file:
         [Service]
         Type=oneshot
         ExecStart=/usr/local/bin/hivemind send_alert_if_necessary
-        TimeoutSec=10
+        TimeoutSec=60
         [Install]
         WantedBy=multi-user.target
 

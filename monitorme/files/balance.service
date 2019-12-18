@@ -2,7 +2,7 @@
 Description=Submit Bitcoin balance to statsd
 
 [Service]
-Type=simple
+Type=oneshot
 # Keep Python site module from breaking. If we do python -S, it can't find aaargh
 ExecStart=/usr/local/bin/balance balance_all
 Environment=HOME=/

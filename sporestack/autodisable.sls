@@ -4,14 +4,8 @@
 
 # Soft script most likely runs at a different time period than the hard script (maybe 25 hours out vs 1 hour out)
 
-## This is for tracking the time until soft/hard disables.
-hedron_sporestack_liferemaining_script:
-  file.managed:
-    - name: /usr/local/bin/liferemaining
-    - mode: 0755
-    - source: salt://hedron/sporestack/files/liferemaining.sh
-##
-
+include:
+  - .liferemaining
 
 {% if 'hedron.sporestack' in pillar %}
 

@@ -39,9 +39,10 @@ hedron_fiat_per_coin_service_timer:
     - name: /etc/systemd/system/fiat_per_coin@.timer
     - contents: |
         [Unit]
-        Description=fiat_per_coin on the 55th minute of every hour
+        Description=fiat_per_coin timer
         [Timer]
-        OnCalendar=*:55
+        OnCalendar=hourly
+        RandomizedDelaySec=3600
         [Install]
         WantedBy=multi-user.target
 
@@ -50,6 +51,8 @@ hedron_fiat_per_coin_service_{{ currency }}_timer_running:
   service.running:
     - name: fiat_per_coin@{{ currency }}.timer
     - enable: True
+    - watch:
+      - file: /etc/systemd/system/fiat_per_coin@.timer
 {% endfor %}
 
 # This needs to be ran so we have data to work with as soon as possible.
