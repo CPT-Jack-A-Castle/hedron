@@ -26,7 +26,7 @@
 "max_extra_bandwidth_per_day_gb":  0,
 "override_code": "{% include '/etc/vmmanagement.override_code' %}",
 "cents_per_disk_gb": 1,
-"cents_per_memory_gb": 14,
+"cents_per_memory_gb": 10,
 "cents_per_core": 5,
 {%- if 'hedron_vmmanagement_max_disk_gb' in grains %}
 "max_disk_gb": {{ grains['hedron_vmmanagement_max_disk_gb'] }},

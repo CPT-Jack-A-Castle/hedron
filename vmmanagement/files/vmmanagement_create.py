@@ -453,7 +453,7 @@ def payment(machine_id,
         output.txid = btcacceptor.txid
         output.amount = btcacceptor.satoshis
         output.uri = btcacceptor.uri
-        msg = 'payment() attempt: URI: {} Cents: {} Affiiate: {} USD: {}'
+        msg = 'payment() attempt: URI: {} Cents: {} Affiliate: {} USD: {}'
         formatted = msg.format(output.uri, cents, affiliate_amount, output.usd)
         logging.info(formatted)
         if btcacceptor.txid is False:

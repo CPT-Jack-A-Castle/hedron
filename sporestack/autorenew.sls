@@ -46,6 +46,7 @@ hedron_sporestack_autorenew_service_timer:
         Description=SporeStack renewal timer
         [Timer]
         OnCalendar=daily
+        RandomizedDelaySec=120
         [Install]
         WantedBy=multi-user.target
     - check_cmd: systemd-analyze verify
@@ -55,4 +56,5 @@ hedron_sporestack_autorenew_service_timer_running:
   service.running:
     - name: autorenew.timer
     - enable: True
-
+    - watch:
+      - file: /etc/systemd/system/autorenew.timer
