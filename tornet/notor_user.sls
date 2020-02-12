@@ -1,10 +1,3 @@
-# FIXME: This is pretty stupid. We install qemu-kvm so we get the kvm group :-/.
-
-hedron_tornet_notor_packages:
-  pkg.installed:
-    - pkgs:
-      - qemu-kvm
-
 # notor user's group
 hedron_tornet_notor_user_group:
   group.present:
@@ -20,5 +13,3 @@ hedron_tornet_notor_user:
     - home: /var/empty
     - createhome: False
     - shell: /bin/bash
-    - groups:
-      - kvm

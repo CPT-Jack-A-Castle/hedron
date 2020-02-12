@@ -8,11 +8,11 @@ hedron_xterm_packages:
 hedron_xterm_systemd_file:
   file.managed:
     - name: /etc/systemd/system/xterm@.service
-    - mode: 0444
+    - mode: 0644
     - source: salt://hedron/xterm/files/xterm@.service
 
 hedron_xterm_root_systemd_file:
   file.managed:
     - name: /etc/systemd/system/xterm@root.service
-    - mode: 0444
+    - mode: 0644
     - source: salt://hedron/xterm/files/xterm@root.service

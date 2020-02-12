@@ -1,0 +1,35 @@
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+
+# We match the slot with port '1' + the slot number as a convention. This is because the slot port already has SSH on it.
+#
+# You must use a non-127.0.0.1 DNS resolver with this setup.
+{% for slot in range(4000, 4060 + 1) %}
+-A OUTPUT ! -o lo -m owner --gid-owner "slot{{ slot }}" -p udp -m udp --dport 53 -j REDIRECT --to-ports 1{{ slot }}
+-A OUTPUT ! -o lo -m owner --gid-owner "slot{{ slot }}" -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports 1{{ slot }}
+{% endfor %}
+-A OUTPUT ! -o lo -m owner --gid-owner "torify" -p udp -m udp --dport 53 -j REDIRECT --to-ports 13999
+-A OUTPUT ! -o lo -m owner --gid-owner "torify"  -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports 13999
+COMMIT
+
+*filter
+:INPUT ACCEPT [0:0]
+# Very odd that bridges invoke the FORWARD chain. Thought that would all be ebtables.
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A OUTPUT -m conntrack --ctstate INVALID -j DROP
+
+{% for slot in range(4000, 4060 + 1) %}
+-A OUTPUT -m owner --gid-owner "slot{{ slot }}" -p udp -m udp --dport 1{{ slot }} -j ACCEPT
+-A OUTPUT -m owner --gid-owner "slot{{ slot }}" -p tcp -m tcp --dport 1{{ slot }} -j ACCEPT
+-A OUTPUT ! -o lo -m owner --gid-owner "slot{{ slot }}" -j REJECT
+{% endfor %}
+-A OUTPUT -m owner --gid-owner "torify" -p udp -m udp --dport 13999 -j ACCEPT
+-A OUTPUT -m owner --gid-owner "torify" -p tcp -m tcp --dport 13999 -j ACCEPT
+-A OUTPUT ! -o lo -m owner --gid-owner "torify" -j REJECT
+
+COMMIT

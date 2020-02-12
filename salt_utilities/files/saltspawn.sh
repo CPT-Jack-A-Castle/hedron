@@ -54,6 +54,7 @@ EXPIRATION=$(sporestackv2 get_attribute "$SALTHOSTNAME" expiration)
 # shellcheck disable=SC2029
 ready_server() {
     ssh -i "$PRIV_KEY_FILE" -l root "$DNSHOSTNAME" -oStrictHostKeyChecking=no -oBatchMode=yes -oUserKnownHostsFile=/dev/null "mkdir /etc/sporestack; chmod 700 /etc/sporestack; echo $EXPIRATION > /etc/sporestack/end_of_life; mkdir /etc/sporestackv2; chmod 700 /etc/sporestackv2; cat > /etc/sporestackv2/$SALTHOSTNAME.json" < "$file_path"
+    # shellcheck disable=SC2181
     if [ $? -ne 0 ]; then
         echo "Sleeping for ten seconds in ready_server..."
         sleep 10

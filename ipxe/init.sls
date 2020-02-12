@@ -20,9 +20,8 @@ hedron_ipxe_source_archive:
   file.managed:
     - name: /srv/salt/dist/ipxe.tar.gz
     - source:
-      - salt://dist/ipxe.tar.gz
-      - http://git.ipxe.org/ipxe.git/snapshot/53af9905e023c89c9d7c30c22eb25f2b0105026c.tar.gz
-    - source_hash: 640ed8aa2e571217fdf9ac65a20692a3f89a04f2ee141e65efdadcca8cc131d4
+      - https://github.com/ipxe/ipxe/archive/18dc73d27edb55ebe9cb13c58d59af3da3bd374b.tar.gz
+    - source_hash: 3fdd34cb51a96c72cf98f0a089b164f3c03d280fb8a061553043ccc49675cb1d
     - makedirs: True
 
 hedron_ipxe_source_directory:

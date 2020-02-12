@@ -37,6 +37,7 @@ stikked() {
     ENDPOINT=$1
     PASTE_FILE=$2
     output=$(curl -s --show-error --fail -d private=1 -d expire=burn --data-urlencode text@"$PASTE_FILE" "$ENDPOINT"/api/create)
+    # shellcheck disable=SC2181
     [ $? -ne 0 ] && return
     pasteid=$(echo "$output" | grep -o '/[a-z0-9]*$' | tr -d /)
     [ -z "$pasteid" ] && return
@@ -50,6 +51,7 @@ burnpaste() {
     ENDPOINT=$1
     PASTE_FILE=$2
     pasteid=$(curl -s --show-error --fail --data-urlencode data@"$PASTE_FILE" "$ENDPOINT"/write)
+    # shellcheck disable=SC2181
     [ $? -ne 0 ] && return
     [ -z "$pasteid" ] && return
     url="$ENDPOINT/read/$pasteid"

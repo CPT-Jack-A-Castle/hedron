@@ -6,6 +6,7 @@ set -e
 
 # This is in case we replace /usr.
 GOCRYPTFS=/gocryptfs
+# shellcheck disable=SC2230
 cp "$(which gocryptfs)" "$GOCRYPTFS"
 
 [ -z "$1" ] && exit 1
