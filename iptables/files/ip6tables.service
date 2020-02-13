@@ -3,8 +3,7 @@
 [Unit]
 Description=ip6tables rules
 DefaultDependencies=no
-After=systemd-sysctl.service
-Before=sysinit.target
+After=iptables.service
 [Service]
 Type=oneshot
 ExecStartPre=/sbin/ip6tables-restore -t /etc/iptables.rules
