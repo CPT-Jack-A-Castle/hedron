@@ -1,13 +1,11 @@
 # Does not directly top up the VM, only issues a request for root to do so.
 
 
-import sys
 import json
 import os
 import logging
 import time
 
-from systemd.journal import JournalHandler
 from sporestackv2 import validate
 
 import hedron
@@ -17,34 +15,6 @@ from vmmanagement_create import (get_and_validate_config,
                                  days_to_expiration,
                                  existing_txids,
                                  payment)
-
-# Log to systemd.
-logging.root.handlers.clear()
-logging.root.addHandler(JournalHandler())
-logging.root.setLevel(logging.INFO)
-
-
-def _exception_handler(exception_type, exception_message, traceback):
-    """
-    Exception handler
-
-    ValueErrors and TypeErrors we send back details on.
-    If it's not one of those, something broke on our end and we need to fix
-    it.
-
-    Remember, this gets ran over SSH through vmmanagement_shell.
-
-    FIXME: Not sure how to handle traceback, it's an object and not a string.
-    """
-    exception_type = exception_type.__name__
-    if exception_type in ['ValueError', 'TypeError']:
-        print(exception_message, file=sys.stderr)
-    else:
-        print('Something broke. Please contact us for help.', file=sys.stderr)
-        logging.critical('{}: {}'.format(exception_type, exception_message))
-
-
-sys.excepthook = _exception_handler
 
 
 def topup_vm(topup_data):
