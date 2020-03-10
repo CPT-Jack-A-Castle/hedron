@@ -31,6 +31,7 @@ hedron_sporestack_autorenew_service:
         [Service]
         Type=oneshot
         ExecStart=/usr/local/sbin/autorenew
+        TimeoutSec=900
         [Install]
         WantedBy=multi-user.target
     - check_cmd: systemd-analyze verify

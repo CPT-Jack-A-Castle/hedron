@@ -1,5 +1,5 @@
-{% set version = '1.13.5' %}
-{% set hash = '512103d7ad296467814a6e3f635631bd35574cab3369a97a323c9a585ccaa569' %}
+{% set version = '1.13.8' %}
+{% set hash = '0567734d558aef19112f2b2873caa0c600f1b4a5827930eb5a7f35235219e9d8' %}
 
 hedron_golang_archive:
   file.managed:

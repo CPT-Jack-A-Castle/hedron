@@ -40,11 +40,6 @@ for argument in $*; do
 done
 
 
-# Make sure the brainkey is valid. Has a check digit that catches 90% of errors.
-# Update: Now that we have the brainkey "public", there's a feedback loop to the user.
-# Getting rid of this fixes a bootstrapping problem not having a way to "sign" your phrase.
-#brainkey validate "$BRAINVAULT" || fail "Invalid brainkey"
-
 # This should only happen in an empty home directory (like /home/user after a reboot).
 # Unfortunately, $HOME is never empty from .bash_history.
 # We'll just check for ~/.ssh and call it a day at that.

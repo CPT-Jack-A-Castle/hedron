@@ -12,5 +12,5 @@ hedron_fiat_per_coin_dependencies:
   pip.installed:
     - pkgs:
       - aaargh
-      - bitcoinacceptor>=0.3.2
+      - bitcoinacceptor>=0.5.0
     - bin_env: /usr/bin/pip3

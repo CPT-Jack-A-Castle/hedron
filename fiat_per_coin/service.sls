@@ -42,7 +42,6 @@ hedron_fiat_per_coin_service_timer:
         Description=fiat_per_coin timer
         [Timer]
         OnCalendar=hourly
-        RandomizedDelaySec=3600
         [Install]
         WantedBy=multi-user.target
 
@@ -56,40 +55,28 @@ hedron_fiat_per_coin_service_{{ currency }}_timer_running:
 {% endfor %}
 
 # This needs to be ran so we have data to work with as soon as possible.
-# Sometimes the price APIs fail. We have some stub values, as of 2019-08-28
+# Sometimes the price APIs fail. We have some stub values, as of 2020-02-28
 # that can be backups so we don't break an entire install.
 hedron_fiat_per_coin_bch_prime:
   cmd.run:
-    - name: systemctl start fiat_per_coin@bch || (echo 300 > /var/cache/fiat_per_coin/bch/even; echo 301 > /var/cache/fiat_per_coin/bch/odd)
+    - name: systemctl start fiat_per_coin@bch || echo 313 > /var/cache/fiat_per_coin/bch/bootstrap
     - creates:
-      - /var/cache/fiat_per_coin/bch/even
-      - /var/cache/fiat_per_coin/bch/odd
+      - /var/cache/fiat_per_coin/bch/bootstrap
 
 hedron_fiat_per_coin_btc_prime:
   cmd.run:
-    - name: systemctl start fiat_per_coin@btc || (echo 10000 > /var/cache/fiat_per_coin/btc/even; echo 10001 > /var/cache/fiat_per_coin/btc/odd)
+    - name: systemctl start fiat_per_coin@btc || echo 8711 > /var/cache/fiat_per_coin/btc/bootstrap
     - creates:
-      - /var/cache/fiat_per_coin/btc/even
-      - /var/cache/fiat_per_coin/btc/odd
+      - /var/cache/fiat_per_coin/btc/bootstrap
 
 hedron_fiat_per_coin_bsv_prime:
   cmd.run:
-    - name: systemctl start fiat_per_coin@bsv || (echo 130 > /var/cache/fiat_per_coin/bsv/even; echo 131 > /var/cache/fiat_per_coin/bsv/odd)
+    - name: systemctl start fiat_per_coin@bsv || echo 217 > /var/cache/fiat_per_coin/bsv/bootstrap
     - creates:
-      - /var/cache/fiat_per_coin/bsv/even
-      - /var/cache/fiat_per_coin/bsv/odd
+      - /var/cache/fiat_per_coin/bsv/bootstrap
 
 hedron_fiat_per_coin_xmr_prime:
   cmd.run:
-    - name: systemctl start fiat_per_coin@xmr || (echo 77 > /var/cache/fiat_per_coin/xmr/even; echo 78 > /var/cache/fiat_per_coin/xmr/odd)
+    - name: systemctl start fiat_per_coin@xmr || echo 69 > /var/cache/fiat_per_coin/xmr/bootstrap
     - creates:
-      - /var/cache/fiat_per_coin/xmr/even
-      - /var/cache/fiat_per_coin/xmr/odd
-
-# Verify things are working as they should be.
-# Eventually, hopefully salt can actually test for creates arguments and except if they aren't made after the state is ran.
-{% for currency in ['btc', 'bch', 'bsv', 'xmr'] %}
-hedron_fiat_per_coin_{{ currency }}_exists:
-  file.exists:
-    - name: /var/cache/fiat_per_coin/{{ currency }}/even
-{% endfor %}
+      - /var/cache/fiat_per_coin/xmr/bootstrap

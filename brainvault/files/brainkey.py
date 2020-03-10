@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# Consider increasing check digits in the future.
-
 import sys
 from hashlib import sha256
 from base64 import b64encode, urlsafe_b64encode
